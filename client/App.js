@@ -1,17 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import { ImageBackground, StyleSheet, View } from 'react-native';
 import Header from './components/Header'
+import {useState} from 'react'
 import CourseContent from './components/CourseContent';
 
 export default function App() {
+
+
   return (
     <>
     <View style={styles.container}>
       <ImageBackground
         style={styles.background}
-        source={require('./img/Untitled-2.png')
+        source={require('./img/background.png')
         }>
-          <Header/>
+  
           <CourseContent/>
       </ImageBackground>
     </View>
