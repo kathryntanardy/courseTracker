@@ -1,71 +1,144 @@
-import { View, Text, ScrollView, FlatList, StyleSheet} from 'react-native'
+import { Image, View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity, Pressable } from 'react-native'
+import { useState } from 'react'
+import Header from './Header'
 
 const courses = [
-    { name: 'English', id: '1A' }
+    { name: 'English', id: '1A', credits: 3 },
+    { name: 'Chinese', id: '2B', credits: 3 },
+    { name: 'CMPT', id: '3C', credits: 4 }
 ];
 
-const Item = ({ name }) => (
-    <View>
-      <Text style={styles.text}>{name}</Text>
-    </View>
-);
-  
 
+const Separator = () => <View style={styles.separator} />;
 export default function CourseContent() {
+    const [subjectName, setSubjectName] = useState('COURSES');
 
-    const renderItem = ({ item }) => <Item name={item.name} />;
-    return (
-        <View style={styles.container}>
-            <Text style={styles.credit}>
-                3
-            </Text>
-            <View style={styles.innerContainer}>
+    const handlePress = (subject) => {
+        setSubjectName(subject.name)
+    }
+
+    const backHome = () => {
+        setSubjectName('COURSES')
+    }
+
+    if (subjectName == 'COURSES') {
+
+        const renderItem = ({ item }) => (
+            <TouchableOpacity onPress={() => handlePress(item)}>
+                <View style={styles.innerContainer}>
+                    <Text style={styles.text}>{item.credits}</Text>
+                    <Text style={styles.right}>{item.name}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+
+        return (
+            <>
+                <View style={styles.headerOuter}>
+                    <Header name={subjectName}/>
+                    <Text style={styles.subHeadingText}>
+                        credits
+                    </Text>
+                </View>
+                <View style={styles.outer}> 
+                    <View style={styles.container}>
                 <FlatList
                     style={styles.divBox}
                     data={courses}
-                    keyExtractor={(item) => item.id}
-                    renderItem={renderItem}></FlatList>
+                    keyExtractor={(item) => item.name}
+                    renderItem={renderItem}
+                    ItemSeparatorComponent={Separator}></FlatList>
             </View>
-           
-           <View>
+                </View>
 
-           </View>
-        </View>
-    )
+            </>
+        )
+    }
+    else {
+        
+        return (
+            <>
+                <View style={styles.pressableOuter}>
+                    <Pressable onPress={backHome}>
+                        <Image
+                            resizeMode='contain'
+                            style={styles.backButton}
+                            source={require('../img/arrow.png')}
+                        />
+                    </Pressable>
+                </View>
+                <View style={styles.outer}>
+                    <Header name={subjectName}/>
+                </View>
+
+
+            </>
+
+        )
+    }
+
 }
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        paddingLeft: 40,
-        justifyContent: 'center',
-        textAlign: 'center'
+        // justifyContent: 'space-between',
+        // flexDirection: 'row',
+        marginHorizontal: 40,
     },
     text: {
-        color: 'white', 
+        color: 'black',
         fontSize: 25,
         fontFamily: 'Arial Rounded MT Bold',
         opacity: 1,
         paddingLeft: 15,
     },
+    right: {
+        color: 'black',
+        fontSize: 25,
+        fontFamily: 'Arial Rounded MT Bold',
+        opacity: 1,
+        paddingLeft: 150,
+    },
     divBox: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
         padding: 15,
+        width: 350,
+    },
+    innerContainer: {
+        flexDirection: 'row',
+    },
+    separator: {
+        borderBottomWidth: 1,
+        borderColor: 'white',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        margin: 20
+    },
+    subHeadingText: {
+        color: '#FFC567',
         marginHorizontal: 40,
-        borderRadius: 5,
+        fontFamily: 'AlNile-Bold',
+        fontSize: 20,
+    },
+    backButton: {
+        width: 30,
+        marginLeft: 40,
+        height: 30,
+        position: 'absolute',
+        padding: 0,
+        marginTop: 40,
+    },
+    outer: {
+        flex: 1,
+    },
+    header:{
+        fontSize: 40,
+        margin: 40,
+
+    },
+    pressableOuter:{
+        paddingTop: 20,
         height: 100,
     },
-    credit: {
-        fontSize: 25,
-        color: 'black',
-        padding: 15,
-        marginLeft: 25,
-        fontFamily: 'Arial Rounded MT Bold',
-    },
-    innerContainer:{
-        padding: 0,
-        width: 300,
-        height: 75,
+    headerOuter:{
+        marginTop: 100,
     }
 })
