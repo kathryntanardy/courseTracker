@@ -8,7 +8,7 @@ const AddCourseMenu = ({ setAddCourseMenu, refetch }) => {
   const [courseName, setCourseName] = useState("");
   const [credits, setCredits] = useState("");
 
-  const addNewCourse = () => {
+  const addNewCourse = async () => {
 
     const newCourseData = {
       name: courseName,
@@ -17,9 +17,9 @@ const AddCourseMenu = ({ setAddCourseMenu, refetch }) => {
     }
 
     try {
-      addCourse(newCourseData);
-      setAddCourseMenu(false);
+      await addCourse(newCourseData);
       refetch();
+      setAddCourseMenu(false);
     } catch (err) {
       console.log(err.message);
     }

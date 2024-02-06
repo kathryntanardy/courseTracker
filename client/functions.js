@@ -9,7 +9,7 @@ export const getCourses = async () => {
         return res.data;
     })
     .catch((err) => err.message);
-}
+};
 
 // Add a new course
 export const addCourse = async (newCourseData) => {
@@ -18,4 +18,13 @@ export const addCourse = async (newCourseData) => {
         return res.data;
     })
     .catch((err) => err.message);
-}
+};
+
+// Delete a course
+export const deleteCourse = async (courseData) => {
+    return await axios.delete(url, { data: courseData })
+    .then((res) => {
+        return res.data;
+    })
+    .catch((err) => err.message);
+};

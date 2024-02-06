@@ -5,6 +5,7 @@ import { getCourses } from '../../functions.js';
 import { useQuery } from 'react-query';
 import styles from './CourseContentStyles.js';
 import AddCourseMenu from '../AddCourseMenu/AddCourseMenu.js';
+import DeleteCourseMenu from '../DeleteCourseMenu/DeleteCourseMenu.js';
 
 const courses = [
     { name: 'English', _id: '1A', credits: 3 },
@@ -16,13 +17,15 @@ const courses = [
 const Separator = () => <View style={styles.separator} />;
 export default function CourseContent() {
 
-    const { data, refetch } = useQuery({
+    const { data, isLoading, refetch } = useQuery({
         queryKey: ["getcourses"],
         queryFn: getCourses
     });
 
     const [subjectName, setSubjectName] = useState('COURSES');
     const [addCourseMenu, setAddCourseMenu] = useState(false);
+    const [deleteCourseMenu, setDeleteCourseMenu] = useState(false);
+    const [courseToDelete, setCourseToDelete] = useState('');
 
     const handlePress = (subject) => {
         setSubjectName(subject.name);
@@ -36,10 +39,18 @@ export default function CourseContent() {
         setAddCourseMenu(true);
     };
 
+    const deleteCourse = (courseToDeleteName) => {
+        setCourseToDelete(courseToDeleteName);
+        setDeleteCourseMenu(true);
+    }
+
     if (subjectName == 'COURSES') {
 
         const renderItem = ({ item }) => (
-            <TouchableOpacity onPress={() => handlePress(item)}>
+            <TouchableOpacity 
+                onPress={() => handlePress(item)}
+                onLongPress={() => deleteCourse(item.name)}
+            >
                 <View style={styles.innerContainer}>
                     <Text style={styles.text}>{item.credits}</Text>
                     <Text style={styles.right}>{item.name}</Text>
@@ -56,6 +67,15 @@ export default function CourseContent() {
                     /> : 
                     (<></>)
                 }
+                {deleteCourseMenu ?
+                    <DeleteCourseMenu 
+                        courseToDelete={courseToDelete}
+                        setDeleteCourseMenu={setDeleteCourseMenu}
+                        refetch={refetch}
+                    />
+                    : 
+                    (<></>)
+                }
                 <View style={styles.headerOuter}>
                     <Header name={subjectName}/>
                     <Text style={styles.subHeadingText}>
@@ -65,17 +85,17 @@ export default function CourseContent() {
                 <View style={styles.addButtonView}>
                     <Button style={styles.addCourseButton} title="Add Course" onPress={addCourse} />
                 </View>
-                <View style={styles.outer}> 
-                    <View style={styles.container}>
-                        <FlatList
-                            style={styles.divBox}
-                            data={data}
-                            extraData={addCourseMenu}
-                            keyExtractor={(item, index) => `${index}` }
-                            renderItem={renderItem}
-                            ItemSeparatorComponent={Separator}></FlatList>
+                    <View style={styles.outer}> 
+                        <View style={styles.container}>
+                            <FlatList
+                                style={styles.divBox}
+                                data={data}
+                                extraData={addCourseMenu}
+                                keyExtractor={(item, index) => `${index}` }
+                                renderItem={renderItem}
+                                ItemSeparatorComponent={Separator}></FlatList>
+                        </View>
                     </View>
-                </View>
             </>
         )
     }
