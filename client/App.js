@@ -3,12 +3,14 @@ import { ImageBackground, StyleSheet, View } from 'react-native';
 import Header from './components/Header'
 import {useState} from 'react'
 import CourseContent from './components/CourseContent';
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 export default function App() {
 
+  const queryClient = new QueryClient();
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
     <View style={styles.container}>
       <ImageBackground
         style={styles.background}
@@ -21,7 +23,7 @@ export default function App() {
     <View>
     
     </View>
-    </>
+    </QueryClientProvider>
   );
 }
 

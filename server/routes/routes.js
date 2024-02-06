@@ -3,13 +3,6 @@ const router = express.Router();
 const Item = require('../models/models');
 const Course = require('../models/models');
 
-// // Test route
-// router.get('/', (req, res) => {
-
-//     res.json({ message: "Sucessfully works" });
-
-// })
-
 router.get('/', async (req, res) => {
 
     try {
