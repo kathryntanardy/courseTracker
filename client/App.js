@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { ImageBackground, StyleSheet, View } from 'react-native';
-import Header from './components/Header'
+import Header from './components/Header/Header'
 import {useState} from 'react'
-import CourseContent from './components/CourseContent';
+import CourseContent from './components/CourseContent/CourseContent';
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 export default function App() {

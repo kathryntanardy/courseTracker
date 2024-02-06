@@ -1,8 +1,10 @@
-import { Image, View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity, Pressable } from 'react-native'
-import { useState, useEffect } from 'react'
-import Header from './Header'
-import { getCourses } from '../functions.js';
+import { Image, View, Text, ScrollView, FlatList, TouchableOpacity, Pressable, Button } from 'react-native'
+import { useState } from 'react'
+import Header from '../Header/Header.js'
+import { getCourses } from '../../functions.js';
 import { useQuery } from 'react-query';
+import styles from './CourseContentStyles.js';
+import AddCourseMenu from '../AddCourseMenu/AddCourseMenu.js';
 
 const courses = [
     { name: 'English', _id: '1A', credits: 3 },
@@ -14,21 +16,26 @@ const courses = [
 const Separator = () => <View style={styles.separator} />;
 export default function CourseContent() {
 
-    const { data, isLoading } = useQuery({
+    const { data, refetch } = useQuery({
         queryKey: ["getcourses"],
         queryFn: getCourses
     });
 
     const [subjectName, setSubjectName] = useState('COURSES');
+    const [addCourseMenu, setAddCourseMenu] = useState(false);
 
     const handlePress = (subject) => {
-        setSubjectName(subject.name)
+        setSubjectName(subject.name);
     }
 
     const backHome = () => {
-        setSubjectName('COURSES')
+        setSubjectName('COURSES');
     }
-    
+
+    const addCourse = () => {
+        setAddCourseMenu(true);
+    };
+
     if (subjectName == 'COURSES') {
 
         const renderItem = ({ item }) => (
@@ -42,18 +49,28 @@ export default function CourseContent() {
 
         return (
             <>
+                {addCourseMenu ? 
+                    <AddCourseMenu 
+                        setAddCourseMenu={setAddCourseMenu}
+                        refetch={refetch}
+                    /> : 
+                    (<></>)
+                }
                 <View style={styles.headerOuter}>
                     <Header name={subjectName}/>
                     <Text style={styles.subHeadingText}>
                         credits
                     </Text>
                 </View>
+                <View style={styles.addButtonView}>
+                    <Button style={styles.addCourseButton} title="Add Course" onPress={addCourse} />
+                </View>
                 <View style={styles.outer}> 
                     <View style={styles.container}>
                         <FlatList
                             style={styles.divBox}
                             data={data}
-                            extraData={data}
+                            extraData={addCourseMenu}
                             keyExtractor={(item, index) => `${index}` }
                             renderItem={renderItem}
                             ItemSeparatorComponent={Separator}></FlatList>
@@ -71,7 +88,7 @@ export default function CourseContent() {
                         <Image
                             resizeMode='contain'
                             style={styles.backButton}
-                            source={require('../img/arrow.png')}
+                            source={require('../../img/arrow.png')}
                         />
                     </Pressable>
                 </View>
@@ -86,67 +103,3 @@ export default function CourseContent() {
     }
 
 }
-
-const styles = StyleSheet.create({
-    container: {
-        // justifyContent: 'space-between',
-        // flexDirection: 'row',
-        marginHorizontal: 40,
-    },
-    text: {
-        color: 'black',
-        fontSize: 25,
-fontFamily: 'Arial Rounded MT Bold',
-        opacity: 1,
-        paddingLeft: 15,
-    },
-    right: {
-        color: 'black',
-        fontSize: 25,
-fontFamily: 'Arial Rounded MT Bold',
-        opacity: 1,
-        paddingLeft: 150,
-    },
-    divBox: {
-        padding: 15,
-        width: 350,
-    },
-    innerContainer: {
-        flexDirection: 'row',
-    },
-    separator: {
-        borderBottomWidth: 1,
-        borderColor: 'white',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        margin: 20
-    },
-    subHeadingText: {
-        color: '#FFC567',
-        marginHorizontal: 40,
-fontFamily: 'AlNile-Bold',
-        fontSize: 20,
-    },
-    backButton: {
-        width: 30,
-        marginLeft: 40,
-        height: 30,
-        position: 'absolute',
-        padding: 0,
-        marginTop: 40,
-    },
-    outer: {
-        flex: 1,
-    },
-    header:{
-        fontSize: 40,
-        margin: 40,
-
-    },
-    pressableOuter:{
-        paddingTop: 20,
-        height: 100,
-    },
-    headerOuter:{
-        marginTop: 100,
-    }
-})
