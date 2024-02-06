@@ -1,16 +1,24 @@
 import { Image, View, Text, ScrollView, FlatList, StyleSheet, TouchableOpacity, Pressable } from 'react-native'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './Header'
+import { getCourses } from '../functions.js';
+import { useQuery } from 'react-query';
 
 const courses = [
-    { name: 'English', id: '1A', credits: 3 },
-    { name: 'Chinese', id: '2B', credits: 3 },
-    { name: 'CMPT', id: '3C', credits: 4 }
+    { name: 'English', _id: '1A', credits: 3 },
+    { name: 'Chinese', _id: '2B', credits: 3 },
+    { name: 'CMPT', _id: '3C', credits: 4 }
 ];
 
 
 const Separator = () => <View style={styles.separator} />;
 export default function CourseContent() {
+
+    const { data, isLoading } = useQuery({
+        queryKey: ["getcourses"],
+        queryFn: getCourses
+    });
+
     const [subjectName, setSubjectName] = useState('COURSES');
 
     const handlePress = (subject) => {
@@ -20,7 +28,7 @@ export default function CourseContent() {
     const backHome = () => {
         setSubjectName('COURSES')
     }
-
+    
     if (subjectName == 'COURSES') {
 
         const renderItem = ({ item }) => (
@@ -42,15 +50,15 @@ export default function CourseContent() {
                 </View>
                 <View style={styles.outer}> 
                     <View style={styles.container}>
-                <FlatList
-                    style={styles.divBox}
-                    data={courses}
-                    keyExtractor={(item) => item.name}
-                    renderItem={renderItem}
-                    ItemSeparatorComponent={Separator}></FlatList>
-            </View>
+                        <FlatList
+                            style={styles.divBox}
+                            data={data}
+                            extraData={data}
+                            keyExtractor={(item, index) => `${index}` }
+                            renderItem={renderItem}
+                            ItemSeparatorComponent={Separator}></FlatList>
+                    </View>
                 </View>
-
             </>
         )
     }
@@ -88,14 +96,14 @@ const styles = StyleSheet.create({
     text: {
         color: 'black',
         fontSize: 25,
-        fontFamily: 'Arial Rounded MT Bold',
+fontFamily: 'Arial Rounded MT Bold',
         opacity: 1,
         paddingLeft: 15,
     },
     right: {
         color: 'black',
         fontSize: 25,
-        fontFamily: 'Arial Rounded MT Bold',
+fontFamily: 'Arial Rounded MT Bold',
         opacity: 1,
         paddingLeft: 150,
     },
@@ -115,7 +123,7 @@ const styles = StyleSheet.create({
     subHeadingText: {
         color: '#FFC567',
         marginHorizontal: 40,
-        fontFamily: 'AlNile-Bold',
+fontFamily: 'AlNile-Bold',
         fontSize: 20,
     },
     backButton: {
