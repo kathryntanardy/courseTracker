@@ -1,4 +1,4 @@
-import { Image, View, Text, ScrollView, FlatList, TouchableOpacity, Pressable, Button } from 'react-native'
+import { Image, View, Text, FlatList, TouchableOpacity, Pressable } from 'react-native'
 import { useState } from 'react'
 import Header from '../Header/Header.js'
 import { getCourses } from '../../functions.js';
@@ -6,6 +6,7 @@ import { useQuery } from 'react-query';
 import styles from './CourseContentStyles.js';
 import AddCourseMenu from '../AddCourseMenu/AddCourseMenu.js';
 import DeleteCourseMenu from '../DeleteCourseMenu/DeleteCourseMenu.js';
+import AntIcon from 'react-native-vector-icons/AntDesign';
 
 const courses = [
     { name: 'English', _id: '1A', credits: 3 },
@@ -52,8 +53,11 @@ export default function CourseContent() {
                 onLongPress={() => deleteCourse(item.name)}
             >
                 <View style={styles.innerContainer}>
-                    <Text style={styles.text}>{item.credits}</Text>
-                    <Text style={styles.right}>{item.name}</Text>
+                    <View style={styles.courseColourCircle} />
+                    <View style={styles.courseInfo}>
+                        <Text style={styles.courseName}>{item.name}</Text>    
+                        <Text style={styles.courseCredits}>{item.credits}</Text>
+                    </View>
                 </View>
             </TouchableOpacity>
         );
@@ -77,25 +81,26 @@ export default function CourseContent() {
                     (<></>)
                 }
                 <View style={styles.headerOuter}>
-                    <Header name={subjectName}/>
-                    <Text style={styles.subHeadingText}>
-                        credits
-                    </Text>
-                </View>
-                <View style={styles.addButtonView}>
-                    <Button style={styles.addCourseButton} title="Add Course" onPress={addCourse} />
-                </View>
-                    <View style={styles.outer}> 
-                        <View style={styles.container}>
-                            <FlatList
-                                style={styles.divBox}
-                                data={data}
-                                extraData={addCourseMenu}
-                                keyExtractor={(item, index) => `${index}` }
-                                renderItem={renderItem}
-                                ItemSeparatorComponent={Separator}></FlatList>
-                        </View>
+                    <View style={styles.headerTextWrapper}>
+                        <Text style={styles.headerText}>
+                            Courses
+                        </Text>
                     </View>
+                    <View style={styles.addButtonWrapper}>
+                        <TouchableOpacity onPress={addCourse} >
+                            <AntIcon name="pluscircleo" color="white" size={30} />
+                        </TouchableOpacity>
+                </View>
+                </View>
+                <View style={styles.container}>
+                    <FlatList
+                        style={styles.divBox}
+                        data={data}
+                        extraData={addCourseMenu}
+                        keyExtractor={item => item._id }
+                        renderItem={renderItem}
+                        ItemSeparatorComponent={Separator}></FlatList>
+                </View>
             </>
         )
     }

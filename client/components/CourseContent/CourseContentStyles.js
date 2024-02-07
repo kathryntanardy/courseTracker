@@ -1,48 +1,41 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-    addButtonView: {
-        width: '50%',
-        marginTop: 20,
-        marginLeft: '25%',
-    },
     container: {
         // justifyContent: 'space-between',
         // flexDirection: 'row',
-        marginHorizontal: 40,
+        // marginHorizontal: 40,
+        width: '100%'
     },
-    text: {
+    courseInfo: {
+        paddingLeft: 15
+    }, 
+    courseCredits: {
+        color: 'black',
+        fontSize: 15,
+        fontFamily: 'Arial Rounded MT Bold',
+        opacity: 1,
+    },
+    courseName: {
         color: 'black',
         fontSize: 25,
-fontFamily: 'Arial Rounded MT Bold',
+        fontFamily: 'Arial Rounded MT Bold',
         opacity: 1,
-        paddingLeft: 15,
-    },
-    right: {
-        color: 'black',
-        fontSize: 25,
-fontFamily: 'Arial Rounded MT Bold',
-        opacity: 1,
-        paddingLeft: 150,
     },
     divBox: {
         padding: 15,
-        width: 350,
     },
     innerContainer: {
         flexDirection: 'row',
+        alignItems: 'center'
     },
     separator: {
         borderBottomWidth: 1,
-        borderColor: 'white',
+        width: '100%',
+        borderColor: 'lightgrey',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        margin: 20
-    },
-    subHeadingText: {
-        color: '#FFC567',
-        marginHorizontal: 40,
-fontFamily: 'AlNile-Bold',
-        fontSize: 20,
+        marginTop: 20,
+        marginBottom: 20
     },
     backButton: {
         width: 30,
@@ -51,6 +44,7 @@ fontFamily: 'AlNile-Bold',
         position: 'absolute',
         padding: 0,
         marginTop: 40,
+        backgroundColor: 'black'
     },
     outer: {
         flex: 1,
@@ -65,7 +59,30 @@ fontFamily: 'AlNile-Bold',
         height: 100,
     },
     headerOuter:{
-        marginTop: 100,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 80,
+        backgroundColor: "green",
+        position: 'fixed'
+    },
+    headerTextWrapper: {
+        position: 'absolute'
+    },
+    headerText: {
+        color: 'white',
+        fontFamily: 'AlNile-Bold',
+        fontSize: 30,
+    },
+    addButtonWrapper: {
+        marginLeft: '80%'
+    },
+    courseColourCircle: {
+        height: 40,
+        width: 40,
+        borderRadius: 25,
+        backgroundColor: 'black'
     }
 });
 
