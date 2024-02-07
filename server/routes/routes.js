@@ -20,7 +20,8 @@ router.post('/', async (req, res) => {
 
         name: req.body.name,
         items: req.body.items,
-        credits: req.body.credits
+        credits: req.body.credits,
+        colour: req.body.colour
 
     });
 
@@ -40,6 +41,7 @@ router.put('/', async (req, res) => {
     const newName = req.body.newName;
     const newItems = req.body.newItems;
     const newCredits = req.body.newCredits;
+    const newColour = req.body.newColour;
 
     try {
 
@@ -47,6 +49,7 @@ router.put('/', async (req, res) => {
         courseToUpdate.name = newName;
         courseToUpdate.items = newItems;
         courseToUpdate.credits = newCredits;
+        courseToUpdate.colour = newColour;
 
         await courseToUpdate.save();
         res.status(200).json(courseToUpdate);

@@ -27,6 +27,10 @@ const courseSchema = new mongoose.Schema({
         type: Number,
         required: true,
         validator: Number.isInteger
+    },
+    colour: {
+        type: String,
+        required: true
     }
 });
 

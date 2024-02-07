@@ -11,10 +11,10 @@ const styles = StyleSheet.create({
     },
     formView: {
         width: '80%',
-        height: 400,
+        height: 700,
         marginRight: '10%',
         marginLeft: '10%',
-        marginTop: '50%',
+        marginTop: '10%',
         zIndex: 3,
         backgroundColor: 'white',
         borderRadius: 10
@@ -41,6 +41,18 @@ const styles = StyleSheet.create({
         width: '80%',
         marginLeft: '10%',
     },
+    colorPickerContainer: {
+        width: '70%',
+        marginTop: '10%',
+        marginLeft: '15%'
+    },
+    selectColourTextContainer: {
+        marginLeft: '10%',
+        marginTop: 20
+    },
+    selectColourText: {
+        fontSize: 20
+    }
 });
 
 export default styles;

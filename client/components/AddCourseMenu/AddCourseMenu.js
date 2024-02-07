@@ -2,18 +2,21 @@ import { View, Text, Button, TextInput } from 'react-native'
 import { useState } from 'react'
 import { addCourse } from '../../functions.js';
 import styles from './AddCourseMenuStyles.js';
+import ColorPicker, { Panel3, BrightnessSlider, Swatches, Preview, OpacitySlider, HueSlider } from 'reanimated-color-picker';
 
 const AddCourseMenu = ({ setAddCourseMenu, refetch }) => {
 
   const [courseName, setCourseName] = useState("");
   const [credits, setCredits] = useState("");
+  const [courseColour, setCourseColour] = useState("");
 
   const addNewCourse = async () => {
 
     const newCourseData = {
       name: courseName,
       items: [],
-      credits: Number(credits)
+      credits: Number(credits),
+      colour: courseColour
     }
 
     try {
@@ -46,6 +49,15 @@ const AddCourseMenu = ({ setAddCourseMenu, refetch }) => {
             placeholder="Number of Credits"
             onChangeText={numCredits => setCredits(numCredits)}
           />
+        </View>
+        <View>
+          <ColorPicker 
+            style={styles.colorPickerContainer}
+            onChange={({ hex }) => setCourseColour(hex)}
+          >
+            <Panel3 centerChannel='saturation' />
+            <BrightnessSlider style={{ marginTop: '10%' }} />
+          </ColorPicker>
         </View>
         <View style={styles.addCourseButtonContainer}>
           <Button 
