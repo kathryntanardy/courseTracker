@@ -53,7 +53,7 @@ export default function CourseContent() {
                 onLongPress={() => deleteCourse(item.name)}
             >
                 <View style={styles.innerContainer}>
-                    <View style={styles.courseColourCircle} />
+                    <View style={[styles.courseColourCircle, { backgroundColor: item.colour }]}  />
                     <View style={styles.courseInfo}>
                         <Text style={styles.courseName}>{item.name}</Text>    
                         <Text style={styles.courseCredits}>{item.credits}</Text>
