@@ -1,5 +1,4 @@
-import { Image, View, Text, ScrollView, FlatList, TouchableOpacity, Pressable, Button, TextInput } from 'react-native';
-import { useState } from 'react';
+import { View, Text, Button } from 'react-native';
 import styles from './DeleteCourseMenuStyles.js';
 import { deleteCourse } from '../../functions.js';
 
