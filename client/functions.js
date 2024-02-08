@@ -38,6 +38,15 @@ export const getItems = async (courseData) => {
     .catch((err) => err.message);
 }
 
+// Add a new item to a course
+export const addItem = async (newItemData) => {
+    return await axios.patch(`${url}/item`, newItemData)
+    .then((res) => {
+        return res.data
+    })
+    .catch((err) => err.message);
+}
+
 // Get subitems from item
 export const getSubItems = async (courseItemData) => {
     return await axios.post(`${url}/item/subitems`, courseItemData)
