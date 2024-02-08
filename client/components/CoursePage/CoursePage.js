@@ -12,12 +12,18 @@ const CoursePage = ({ navigation, route }) => {
         queryFn: () => getItems(route.params.name),
     });
 
+    const handlePress = (item) => {
+        navigation.navigate('Item', item);
+    };
+
     const goBack = () => {
         navigation.navigate('Home');
     };
 
     const renderItem = ({ item }) => (
-        <TouchableOpacity>
+        <TouchableOpacity
+            onPress={() => handlePress(item)}
+        >
             <View style={styles.innerContainer}>
                 <View style={styles.courseInfo}>
                     <Text style={styles.courseName}>{item.name}</Text>    
