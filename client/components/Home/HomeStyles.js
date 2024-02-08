@@ -2,9 +2,6 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
-        // justifyContent: 'space-between',
-        // flexDirection: 'row',
-        // marginHorizontal: 40,
         width: '100%'
     },
     courseInfo: {
