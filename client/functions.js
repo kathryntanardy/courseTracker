@@ -47,6 +47,15 @@ export const addItem = async (newItemData) => {
     .catch((err) => err.message);
 }
 
+// Delete an item from a course
+export const deleteItem = async (itemData) => {
+    return await axios.delete(`${url}/item`, { data: itemData })
+    .then((res) => {
+        return res.data;
+    })
+    .catch((err) => err.message);
+};
+
 // Get subitems from item
 export const getSubItems = async (courseItemData) => {
     return await axios.post(`${url}/item/subitems`, courseItemData)
