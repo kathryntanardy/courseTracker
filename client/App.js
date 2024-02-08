@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CoursePage from './components/CoursePage/CoursePage';
+import ItemPage from './components/ItemPage/ItemPage';
 
 export default function App() {
 
@@ -29,6 +30,10 @@ export default function App() {
             <Stack.Screen 
               name="Course"
               component={CoursePage}
+            />
+            <Stack.Screen 
+              name="Item"
+              component={ItemPage}
             />
           </Stack.Navigator>
         </View>

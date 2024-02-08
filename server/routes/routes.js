@@ -164,8 +164,35 @@ router.delete('/item', async (req, res) => {
         course.items.splice(itemToDeleteIndex, 1);
 
         await course.save();
-        res.status(200).json({ message: "Successfully deleted course" });
+        res.status(200).json({ message: "Successfully deleted item" });
 
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+
+});
+
+// SubItems
+
+// Add a subitem to an item
+router.patch('/item/subitem', async (req, res) => {
+
+    const courseName = req.body.courseName;
+    const itemName = req.body.itemName;
+
+    try {
+
+        const course = await Course.findOne({ name: courseName });
+        const courseItem = course.items.find((item) => item.name === itemName);
+        const subItem = {
+            subName: req.body.subName,
+            subWeight: req.body.subWeight,
+            subGrade: req.body.subGrade
+        }
+
+        courseItem.subItems.push(subItem);
+        await course.save();
+        res.status(200).json(subItem);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
