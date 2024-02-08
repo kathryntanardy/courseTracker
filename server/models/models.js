@@ -19,6 +19,23 @@ const courseSchema = new mongoose.Schema({
             grade: {
                 type: Number,
                 required: true
+            },
+            subItems: {
+                type: [{
+                    subName: {
+                        type: String,
+                        required: true
+                    },
+                    subWeight: {
+                        type: Number,
+                        required: true
+                    },
+                    subGrade: {
+                        type: Number,
+                        required: true
+                    }
+                }],
+                required: true
             }
         }],
         required: true
