@@ -20,6 +20,20 @@ const styles = StyleSheet.create({
     },
     backButtonWrapper: {
         marginRight: '80%'
+    },
+    flatListContainer: {
+        width: '100%'
+    },
+    flatListItem: {
+        padding: 15,
+    },
+    separator: {
+        borderBottomWidth: 1,
+        width: '100%',
+        borderColor: 'lightgrey',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        marginTop: 20,
+        marginBottom: 20
     }
 });
 

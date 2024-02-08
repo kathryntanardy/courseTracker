@@ -83,7 +83,7 @@ router.delete('/', async (req, res) => {
 router.get('/allitems', async (req, res) => {
 
     try {
-        const course = await Course.findOne({ name: req.body.courseName });
+        const course = await Course.findOne({ name: req.query.courseName });
         res.status(200).json(course.items);
 
     } catch (err) {
@@ -117,7 +117,8 @@ router.patch('/item', async (req, res) => {
         const item = {
             name: req.body.itemName,
             weight: req.body.weight,
-            grade: req.body.grade
+            grade: req.body.grade,
+            subItems: []
         };
         course.items.push(item);
         await course.save();

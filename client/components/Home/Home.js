@@ -1,6 +1,5 @@
 import { View, Text, FlatList, TouchableOpacity, StatusBar } from 'react-native'
 import { useState } from 'react'
-import Header from '../Header/Header.js'
 import { getCourses } from '../../functions.js';
 import { useQuery } from 'react-query';
 import styles from './HomeStyles.js';
@@ -56,7 +55,7 @@ export default function CourseContent({ navigation }) {
     );
 
     return (
-        <View style={{ marginTop: StatusBar.currentHeight }}>
+        <View style={{ top: StatusBar.currentHeight, height: '100%' }}>
             {addCourseMenu ? 
                 <AddCourseMenu 
                     setAddCourseMenu={setAddCourseMenu}
@@ -92,7 +91,8 @@ export default function CourseContent({ navigation }) {
                     extraData={addCourseMenu}
                     keyExtractor={item => item._id }
                     renderItem={renderItem}
-                    ItemSeparatorComponent={Separator}></FlatList>
+                    ItemSeparatorComponent={Separator}
+                />
             </View>
         </View>
     )
