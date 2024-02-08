@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
     },
     headerText: {
         color: 'white',
-        fontFamily: 'AlNile-Bold',
         fontSize: 30,
     },
     backButtonWrapper: {

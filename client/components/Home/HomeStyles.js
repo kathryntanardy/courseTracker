@@ -10,13 +10,11 @@ const styles = StyleSheet.create({
     courseCredits: {
         color: 'black',
         fontSize: 15,
-        fontFamily: 'Arial Rounded MT Bold',
         opacity: 1,
     },
     courseName: {
         color: 'black',
         fontSize: 25,
-        fontFamily: 'Arial Rounded MT Bold',
         opacity: 1,
     },
     divBox: {
@@ -69,7 +67,6 @@ const styles = StyleSheet.create({
     },
     headerText: {
         color: 'white',
-        fontFamily: 'AlNile-Bold',
         fontSize: 30,
     },
     addButtonWrapper: {

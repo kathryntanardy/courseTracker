@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
         fontSize: 35,
         paddingTop: 0,
         marginLeft: 40,
-        fontFamily: 'AlNile-Bold',
         color: 'white',
         textTransform:'uppercase',
     },
