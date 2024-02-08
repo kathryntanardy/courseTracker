@@ -5,11 +5,14 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import { useQuery } from 'react-query';
 import { getItems } from '../../functions.js';
 import AddItemMenu from '../AddItemMenu/AddItemMenu.js';
+import DeleteItemMenu from '../DeleteItemMenu/DeleteItemMenu.js';
 
 const Separator = () => <View style={styles.separator} />;
 const CoursePage = ({ navigation, route }) => {
   
     const [addItemMenu, setAddItemMenu] = useState(false);
+    const [deleteItemMenu, setDeleteItemMenu] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState("");
 
     const { data, refetch } = useQuery({
         queryKey: ["getItems"],
@@ -21,6 +24,11 @@ const CoursePage = ({ navigation, route }) => {
         navigation.navigate('Item', item);
     };
 
+    const deleteItem = (itemName) => {
+        setItemToDelete(itemName);
+        setDeleteItemMenu(true);
+    }
+
     const goBack = () => {
         navigation.navigate('Home');
     };
@@ -28,6 +36,7 @@ const CoursePage = ({ navigation, route }) => {
     const renderItem = ({ item }) => (
         <TouchableOpacity
             onPress={() => handlePress(item)}
+            onLongPress={() => deleteItem(item.name)}
         >
             <View style={styles.innerContainer}>
                 <View style={styles.courseInfo}>
@@ -45,6 +54,14 @@ const CoursePage = ({ navigation, route }) => {
                     courseName={route.params.name}
                     refetch={refetch}
                     setAddItemMenu={setAddItemMenu}
+                />
+            ) : (<></>)}
+            {deleteItemMenu ? (
+                <DeleteItemMenu
+                    courseName={route.params.name}
+                    itemName={itemToDelete}
+                    refetch={refetch}
+                    setDeleteItemMenu={setDeleteItemMenu}
                 />
             ) : (<></>)}
             <View style={[styles.headerContainer, { backgroundColor: route.params.colour }]}>
