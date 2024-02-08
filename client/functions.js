@@ -28,3 +28,12 @@ export const deleteCourse = async (courseData) => {
     })
     .catch((err) => err.message);
 };
+
+// Get all items from a course
+export const getItems = async (courseData) => {
+    return await axios.get(`${url}/allitems?courseName=${courseData}`)
+    .then((res) => {
+        return res.data;
+    })
+    .catch((err) => err.message);
+}
