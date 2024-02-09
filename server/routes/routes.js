@@ -213,7 +213,29 @@ router.patch('/item/subitem', async (req, res) => {
         await course.save();
         res.status(200).json(subItem);
     } catch (err) {
-        console.log(err.message);
+        res.status(500).json({ message: err.message });
+    }
+
+});
+
+// Delete subitem from an item
+router.delete('/item/subitem', async (req, res) => {
+
+    const courseName = req.body.courseName;
+    const itemName = req.body.itemName;
+    const subItemName = req.body.subItemName;
+
+    try {
+        const course = await Course.findOne({ name: courseName });
+        const itemToFind = course.items.find((item) => item.name === itemName);
+        const subItemToFind = itemToFind.subItems.find((subItem) => subItem.subName === subItemName);
+        const subItemToDeleteIndex = itemToFind.subItems.indexOf(subItemToFind);
+        itemToFind.subItems.splice(subItemToDeleteIndex, 1);
+
+        await course.save();
+        res.status(200).json(itemToFind);
+
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
 

@@ -9,11 +9,14 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import styles from './ItemPageStyles.js';
 import { StackActions } from '@react-navigation/native';
 import AddSubItemMenu from '../AddSubItemMenu/AddSubItemMenu.js';
+import DeleteSubItemMenu from '../DeleteSubItemMenu/DeleteSubItemMenu.js';
 
 const Separator = () => <View style={styles.separator} />;
 const ItemPage = ({ navigation, route }) => {
   
+    const [subItemToDelete, setSubItemToDelete] = useState("");
     const [addSubItemMenu, setAddSubItemMenu] = useState(false);
+    const [deleteSubItemMenu, setDeleteSubItemMenu] = useState(false);
 
     const { data, refetch } = useQuery({
         queryKey:["getSubItems"],
@@ -23,12 +26,19 @@ const ItemPage = ({ navigation, route }) => {
             })
     });
 
+    const deleteSubItem = (subItemName) => {
+        setSubItemToDelete(subItemName);
+        setDeleteSubItemMenu(true);
+    };
+
     const goBack = () => {
         navigation.dispatch(StackActions.pop());
     };
     
     const renderItem = ({ item }) => (
-        <TouchableOpacity>
+        <TouchableOpacity
+            onLongPress={() => deleteSubItem(item.subName)}
+        >
             <View style={styles.innerContainer}>
                 <View style={styles.courseInfo}>
                     <Text style={styles.courseName}>{item.subName}</Text>    
@@ -46,6 +56,15 @@ const ItemPage = ({ navigation, route }) => {
                     itemName={route.params.name}
                     refetch={refetch}
                     setAddSubItemMenu={setAddSubItemMenu}
+                />
+            ) : (<></>)}
+            {deleteSubItemMenu ? (
+                <DeleteSubItemMenu 
+                    courseName={route.params.courseName}
+                    itemName={route.params.name}
+                    subItemName={subItemToDelete}
+                    refetch={refetch}
+                    setDeleteSubItemMenu={setDeleteSubItemMenu}
                 />
             ) : (<></>)}
             <View style={[styles.headerContainer, { backgroundColor: route.params.colour }]}>
