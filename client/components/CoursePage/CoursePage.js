@@ -20,6 +20,7 @@ const CoursePage = ({ navigation, route }) => {
     });
 
     const handlePress = (item) => {
+        item.courseName = route.params.name;
         item.colour = route.params.colour;
         navigation.navigate('Item', item);
     };
