@@ -174,6 +174,25 @@ router.delete('/item', async (req, res) => {
 
 // SubItems
 
+// Get subItems of an item
+router.get('/item/subitem', async (req, res) => {
+
+    const courseName = req.query.courseName;
+    const itemName = req.query.itemName;
+
+    try {
+
+        const course = await Course.findOne({ name: courseName });
+        const itemToFind = course.items.find((item) => item.name === itemName);
+
+        res.status(200).json(itemToFind.subItems);
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+
+});
+
 // Add a subitem to an item
 router.patch('/item/subitem', async (req, res) => {
 
@@ -194,6 +213,7 @@ router.patch('/item/subitem', async (req, res) => {
         await course.save();
         res.status(200).json(subItem);
     } catch (err) {
+        console.log(err.message);
         res.status(500).json({ message: err.message });
     }
 

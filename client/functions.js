@@ -56,9 +56,19 @@ export const deleteItem = async (itemData) => {
     .catch((err) => err.message);
 };
 
-// Get subitems from item
+// Get subItems from Item
 export const getSubItems = async (courseItemData) => {
-    return await axios.post(`${url}/item/subitems`, courseItemData)
+    return await axios.get(`${url}/item/subitem?courseName=${courseItemData.courseName}&itemName=${courseItemData.itemName}`)
+    .then((res) => {
+        return res.data;
+    })
+    .catch((err) => err.message);
+};
+
+// Add subitem to Item
+export const addSubItem = async (courseItemData) => {
+    console.log(courseItemData);
+    return await axios.patch(`${url}/item/subitem`, courseItemData)
     .then((res) => {
         return res.data;
     })
