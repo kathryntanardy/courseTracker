@@ -37,12 +37,12 @@ const ItemPage = ({ navigation, route }) => {
     
     const renderItem = ({ item }) => (
         <TouchableOpacity
-            onLongPress={() => deleteSubItem(item.subName)}
+            onLongPress={() => deleteSubItem(item.name)}
         >
             <View style={styles.innerContainer}>
                 <View style={styles.courseInfo}>
-                    <Text style={styles.courseName}>{item.subName}</Text>    
-                    <Text style={styles.courseCredits}>{item.subGrade} / {item.subWeight}</Text>
+                    <Text style={styles.courseName}>{item.name} ({item.weight}%)</Text>    
+                    <Text style={styles.courseCredits}>{item.grade} / {item.totalMarks}</Text>
                 </View>
             </View>
         </TouchableOpacity>

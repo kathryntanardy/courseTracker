@@ -207,9 +207,10 @@ router.patch('/item/subitem', async (req, res) => {
         const course = await Course.findOne({ name: courseName });
         const courseItem = course.items.find((item) => item.name === itemName);
         const subItem = {
-            subName: req.body.subName,
-            subWeight: req.body.subWeight,
-            subGrade: req.body.subGrade
+            name: req.body.name,
+            weight: req.body.weight,
+            totalMarks: req.body.totalMarks,
+            grade: req.body.grade
         }
 
         courseItem.subItems.push(subItem);
@@ -231,7 +232,7 @@ router.delete('/item/subitem', async (req, res) => {
     try {
         const course = await Course.findOne({ name: courseName });
         const itemToFind = course.items.find((item) => item.name === itemName);
-        const subItemToFind = itemToFind.subItems.find((subItem) => subItem.subName === subItemName);
+        const subItemToFind = itemToFind.subItems.find((subItem) => subItem.name === subItemName);
         const subItemToDeleteIndex = itemToFind.subItems.indexOf(subItemToFind);
         itemToFind.subItems.splice(subItemToDeleteIndex, 1);
 
