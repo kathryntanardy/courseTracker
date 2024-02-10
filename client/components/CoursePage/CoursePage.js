@@ -35,12 +35,16 @@ const CoursePage = ({ navigation, route }) => {
 
     const displayGrade = (itemPercentage) => {
 
+        if (itemPercentage === -1) {
+            return "";
+        }
+
         itemPercentage *= 100;
 
         if (Number.isInteger(itemPercentage)) {
-            return itemPercentage;
+            return `${itemPercentage}%`;
         } else {
-            return itemPercentage.toFixed(2);
+            return `${itemPercentage.toFixed(2)}%`;
         }
     };
 
@@ -56,7 +60,9 @@ const CoursePage = ({ navigation, route }) => {
             <View style={styles.innerContainer}>
                 <View style={styles.courseInfo}>
                     <Text style={styles.courseName}>{item.name} ({item.weight}%)</Text>    
-                    <Text style={styles.courseCredits}>{displayGrade(item.percentage)}%</Text>
+                    <Text style={styles.courseCredits}>
+                        {displayGrade(item.percentage)}
+                    </Text>
                 </View>
             </View>
         </TouchableOpacity>

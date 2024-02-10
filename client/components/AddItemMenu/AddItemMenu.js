@@ -7,8 +7,8 @@ const AddItemMenu = ({ courseName, refetch, setAddItemMenu }) => {
 
     const [itemName, setItemName] = useState("");
     const [itemWeight, setItemWeight] = useState("");
-    const [itemTotalMarks, setItemTotalMarks] = useState("");
-    const [itemGrade, setItemGrade] = useState("");
+    const [itemTotalMarks, setItemTotalMarks] = useState("-1");
+    const [itemGrade, setItemGrade] = useState("-1");
 
     const addNewItem = async () => {
 
@@ -18,7 +18,7 @@ const AddItemMenu = ({ courseName, refetch, setAddItemMenu }) => {
             weight: Number(itemWeight),
             totalMarks: Number(itemTotalMarks),
             grade: Number(itemGrade),
-            percentage: Number(itemGrade) / Number(itemTotalMarks)
+            percentage: -1
         };
 
         try {
