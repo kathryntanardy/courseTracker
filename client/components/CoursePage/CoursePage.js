@@ -11,7 +11,11 @@ const Separator = () => <View style={styles.separator} />;
 const CoursePage = ({ navigation, route }) => {
   
     const [addItemMenu, setAddItemMenu] = useState(false);
+    const [editItemMenu, setEditItemMenu] = useState(false);
+    const [editItemData, setEditItemData] = useState({});
     const [deleteItemMenu, setDeleteItemMenu] = useState(false);
+    const [displayItemOptions, setDisplayItemOptions] = useState(false);
+    const [selectedItem, setSelectedItem] = useState("");
     const [itemToDelete, setItemToDelete] = useState("");
 
     const { data, refetch } = useQuery({
@@ -26,6 +30,14 @@ const CoursePage = ({ navigation, route }) => {
             item: item,
             refetch: () => refetch()
         });
+    };
+
+    const openEditItemMenu = (item) => {
+
+        setEditItemData(item);
+        setEditItemMenu(true);
+        setAddItemMenu(true);
+
     };
 
     const deleteItem = (itemName) => {
@@ -48,6 +60,11 @@ const CoursePage = ({ navigation, route }) => {
         }
     };
 
+    const setSelectedItemID = (itemID) => {
+        setSelectedItem(itemID);
+        setDisplayItemOptions(true);
+    };
+
     const goBack = () => {
         navigation.navigate('Home');
     };
@@ -55,7 +72,7 @@ const CoursePage = ({ navigation, route }) => {
     const renderItem = ({ item }) => (
         <TouchableOpacity
             onPress={() => handlePress(item)}
-            onLongPress={() => deleteItem(item.name)}
+            onLongPress={() => setSelectedItemID(item._id)}
         >
             <View style={styles.innerContainer}>
                 <View style={styles.courseInfo}>
@@ -64,6 +81,40 @@ const CoursePage = ({ navigation, route }) => {
                         {displayGrade(item.percentage)}
                     </Text>
                 </View>
+                {displayItemOptions && selectedItem === item._id ? (
+                <View style={styles.displayItemOptionsContainer}>
+                    <TouchableOpacity>
+                        <AntIcon 
+                            style={styles.editItemButton}
+                            size={20}
+                            name="edit" 
+                            backgroundColor={route.params.colour}
+                            onPress={() => openEditItemMenu(item)}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <AntIcon 
+                            style={styles.editItemButton}
+                            size={20}
+                            name="delete" 
+                            backgroundColor={route.params.colour}
+                            onPress={() => deleteItem(item.name)}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <AntIcon 
+                            style={styles.editItemButton}
+                            size={20}
+                            name="back" 
+                            backgroundColor={route.params.colour}
+                            onPress={() => {
+                                setSelectedItem("");
+                                setDisplayItemOptions(false);
+                            }}
+                        />
+                    </TouchableOpacity>
+                </View>
+                ) : (<></>)}
             </View>
         </TouchableOpacity>
     );
@@ -75,6 +126,9 @@ const CoursePage = ({ navigation, route }) => {
                     courseName={route.params.name}
                     refetch={refetch}
                     setAddItemMenu={setAddItemMenu}
+                    editItemMenu={editItemMenu}
+                    setEditItemMenu={setEditItemMenu}
+                    editItemData={editItemData}
                 />
             ) : (<></>)}
             {deleteItemMenu ? (
