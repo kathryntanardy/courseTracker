@@ -262,7 +262,12 @@ router.delete('/item/subitem', async (req, res) => {
             
             itemToFind.percentage = tempGrade / tempWeight;
         } else {
-            itemToFind.percentage = itemToFind.grade / itemToFind.totalMarks;
+
+            if (itemToFind.totalMarks !== -1) {
+                itemToFind.percentage = itemToFind.grade / itemToFind.totalMarks;
+            } else {
+                itemToFind.percentage = -1;
+            }
         }
 
         await course.save();
