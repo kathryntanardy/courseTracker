@@ -15,9 +15,10 @@ const AddItemMenu = ({ courseName, refetch, setAddItemMenu }) => {
         const newItem = {
             courseName: courseName,
             itemName: itemName,
-            weight: itemWeight,
-            totalMarks: itemTotalMarks,
-            grade: itemGrade
+            weight: Number(itemWeight),
+            totalMarks: Number(itemTotalMarks),
+            grade: Number(itemGrade),
+            percentage: Number(itemGrade) / Number(itemTotalMarks)
         };
 
         try {

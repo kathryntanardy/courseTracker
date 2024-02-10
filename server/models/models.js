@@ -24,6 +24,10 @@ const courseSchema = new mongoose.Schema({
                 type: Number,
                 required: true
             },
+            percentage: {
+                type: Number,
+                required: true
+            },
             subItems: {
                 type: [{
                     name: {

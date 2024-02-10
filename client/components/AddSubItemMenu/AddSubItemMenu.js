@@ -16,9 +16,9 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu }) =>
       courseName: courseName,
       itemName: itemName,
       name: subName,
-      weight: subWeight,
-      totalMarks: subTotalMarks,
-      grade: subGrade
+      weight: Number(subWeight),
+      totalMarks: Number(subTotalMarks),
+      grade: Number(subGrade)
     };
 
     try {

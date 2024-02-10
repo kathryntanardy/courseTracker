@@ -21,8 +21,8 @@ const ItemPage = ({ navigation, route }) => {
     const { data, refetch } = useQuery({
         queryKey:["getSubItems"],
         queryFn: () => getSubItems({ 
-                courseName: route.params.courseName,
-                itemName: route.params.name  
+                courseName: route.params.item.courseName,
+                itemName: route.params.item.name  
             })
     });
 
@@ -32,7 +32,8 @@ const ItemPage = ({ navigation, route }) => {
     };
 
     const goBack = () => {
-        navigation.dispatch(StackActions.pop());
+        route.params.refetch();
+        navigation.goBack();
     };
     
     const renderItem = ({ item }) => (
@@ -52,22 +53,22 @@ const ItemPage = ({ navigation, route }) => {
         <View style={{ marginTop: StatusBar.currentHeight, height: '100%' }}>
             {addSubItemMenu ? (
                 <AddSubItemMenu
-                    courseName={route.params.courseName}
-                    itemName={route.params.name}
+                    courseName={route.params.item.courseName}
+                    itemName={route.params.item.name}
                     refetch={refetch}
                     setAddSubItemMenu={setAddSubItemMenu}
                 />
             ) : (<></>)}
             {deleteSubItemMenu ? (
                 <DeleteSubItemMenu 
-                    courseName={route.params.courseName}
-                    itemName={route.params.name}
+                    courseName={route.params.item.courseName}
+                    itemName={route.params.item.name}
                     subItemName={subItemToDelete}
                     refetch={refetch}
                     setDeleteSubItemMenu={setDeleteSubItemMenu}
                 />
             ) : (<></>)}
-            <View style={[styles.headerContainer, { backgroundColor: route.params.colour }]}>
+            <View style={[styles.headerContainer, { backgroundColor: route.params.item.colour }]}>
                 <View style={styles.backButtonWrapper}>
                     <TouchableOpacity onPress={goBack} >
                         <AntIcon name="back" color="white" size={30} />
@@ -75,7 +76,7 @@ const ItemPage = ({ navigation, route }) => {
                 </View>
                 <View style={styles.headerTextWrapper}>
                     <Text style={styles.headerText}>
-                        {route.params.name}
+                        {route.params.item.name}
                     </Text>
                 </View>
             </View>
