@@ -16,6 +16,10 @@ const courseSchema = new mongoose.Schema({
                 type: Number,
                 required: true
             },
+            totalMarks: {
+                type: Number,
+                required: true
+            },
             grade: {
                 type: Number,
                 required: true

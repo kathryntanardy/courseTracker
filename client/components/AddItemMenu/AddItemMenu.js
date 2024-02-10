@@ -7,6 +7,7 @@ const AddItemMenu = ({ courseName, refetch, setAddItemMenu }) => {
 
     const [itemName, setItemName] = useState("");
     const [itemWeight, setItemWeight] = useState("");
+    const [itemTotalMarks, setItemTotalMarks] = useState("");
     const [itemGrade, setItemGrade] = useState("");
 
     const addNewItem = async () => {
@@ -15,6 +16,7 @@ const AddItemMenu = ({ courseName, refetch, setAddItemMenu }) => {
             courseName: courseName,
             itemName: itemName,
             weight: itemWeight,
+            totalMarks: itemTotalMarks,
             grade: itemGrade
         };
 
@@ -50,6 +52,13 @@ const AddItemMenu = ({ courseName, refetch, setAddItemMenu }) => {
                 style={styles.addItemInput}
                 placeholder="Weight"
                 onChangeText={weight => setItemWeight(weight)}
+              />
+            </View>
+            <View style={styles.addItemInputContainer}>
+              <TextInput
+                style={styles.addItemInput}
+                placeholder="Total Marks"
+                onChangeText={marks => setItemTotalMarks(marks)}
               />
             </View>
             <View style={styles.addItemInputContainer}>

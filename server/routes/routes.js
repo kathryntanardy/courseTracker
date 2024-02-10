@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Course = require('../models/models');
 
+// Get all courses
 router.get('/', async (req, res) => {
 
     try {
@@ -117,6 +118,7 @@ router.patch('/item', async (req, res) => {
         const item = {
             name: req.body.itemName,
             weight: req.body.weight,
+            totalMarks: req.body.totalMarks,
             grade: req.body.grade,
             subItems: []
         };
@@ -142,6 +144,7 @@ router.patch('/item/edit', async (req, res) => {
 
         itemToUpdate.name = req.body.name;
         itemToUpdate.weight = req.body.weight;
+        itemToUpdate.totalMarks = req.body.totalMarks;
         itemToUpdate.grade = req.body.grade;
 
         await courseToUpdate.save();
