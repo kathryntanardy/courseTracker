@@ -41,8 +41,8 @@ const CoursePage = ({ navigation, route }) => {
         >
             <View style={styles.innerContainer}>
                 <View style={styles.courseInfo}>
-                    <Text style={styles.courseName}>{item.name}</Text>    
-                    <Text style={styles.courseCredits}>{item.grade} / {item.weight}</Text>
+                    <Text style={styles.courseName}>{item.name} ({item.weight}%)</Text>    
+                    <Text style={styles.courseCredits}>{item.grade} / {item.totalMarks}</Text>
                 </View>
             </View>
         </TouchableOpacity>
