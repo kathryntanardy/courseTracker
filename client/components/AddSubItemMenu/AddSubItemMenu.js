@@ -7,6 +7,7 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu }) =>
 
   const [subName, setSubName] = useState("");
   const [subWeight, setSubWeight] = useState("");
+  const [subTotalMarks, setSubTotalMarks] = useState("");
   const [subGrade, setSubGrade] = useState("");
 
   const addNewSubItem = async () => {
@@ -14,9 +15,10 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu }) =>
     const newSubItemData = {
       courseName: courseName,
       itemName: itemName,
-      subName: subName,
-      subWeight: subWeight,
-      subGrade: subGrade
+      name: subName,
+      weight: subWeight,
+      totalMarks: subTotalMarks,
+      grade: subGrade
     };
 
     try {
@@ -49,6 +51,13 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu }) =>
             style={styles.addSubItemInput}
             placeholder="Weight"
             onChangeText={weight => setSubWeight(weight)}
+          />
+        </View>
+        <View style={styles.addSubItemInputContainer}>
+          <TextInput
+            style={styles.addSubItemInput}
+            placeholder="Total Marks"
+            onChangeText={marks => setSubTotalMarks(marks)}
           />
         </View>
         <View style={styles.addSubItemInputContainer}>
