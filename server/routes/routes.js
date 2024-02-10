@@ -123,6 +123,11 @@ router.patch('/item', async (req, res) => {
             percentage: req.body.percentage,
             subItems: []
         };
+
+        if (item.totalMarks !== -1 && item.grade !== -1) {
+            item.percentage = item.grade / item.totalMarks;
+        }
+
         course.items.push(item);
         await course.save();
         res.status(201).json(course);
@@ -146,8 +151,13 @@ router.patch('/item/edit', async (req, res) => {
         itemToUpdate.name = req.body.name;
         itemToUpdate.weight = req.body.weight;
         itemToUpdate.totalMarks = req.body.totalMarks;
-        itemToUpdate.percentage = req.body.percentage;
         itemToUpdate.grade = req.body.grade;
+
+        if (itemToUpdate.totalMarks !== -1 && itemToUpdate.grade !== -1) {
+            itemToUpdate.percentage = itemToUpdate.grade / itemToUpdate.totalMarks;
+        } else {
+            itemToUpdate.percentage = -1;
+        }
 
         await courseToUpdate.save();
         res.status(200).json(itemToUpdate);

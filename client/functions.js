@@ -47,6 +47,14 @@ export const addItem = async (newItemData) => {
     .catch((err) => err.message);
 }
 
+export const editItem = async (itemData) => {
+    return await axios.patch(`${url}/item/edit`, itemData)
+    .then((res) => {
+        return res.data;
+    })
+    .catch((err) => err.message);
+}
+
 // Delete an item from a course
 export const deleteItem = async (itemData) => {
     return await axios.delete(`${url}/item`, { data: itemData })

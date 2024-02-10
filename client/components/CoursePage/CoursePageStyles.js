@@ -34,6 +34,24 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         marginTop: 20,
         marginBottom: 20
+    },
+    innerContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    editItemButton: {
+        color: "white",
+        borderRadius: 10,
+        padding: 5
+    },
+    displayItemOptionsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '40%',
+        marginRight: '10%',
+        alignItems: 'center'
     }
 });
 
