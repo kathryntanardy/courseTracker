@@ -22,13 +22,27 @@ const CoursePage = ({ navigation, route }) => {
     const handlePress = (item) => {
         item.courseName = route.params.name;
         item.colour = route.params.colour;
-        navigation.navigate('Item', item);
+        navigation.navigate('Item', {
+            item: item,
+            refetch: () => refetch()
+        });
     };
 
     const deleteItem = (itemName) => {
         setItemToDelete(itemName);
         setDeleteItemMenu(true);
     }
+
+    const displayGrade = (itemPercentage) => {
+
+        itemPercentage *= 100;
+
+        if (Number.isInteger(itemPercentage)) {
+            return itemPercentage;
+        } else {
+            return itemPercentage.toFixed(2);
+        }
+    };
 
     const goBack = () => {
         navigation.navigate('Home');
@@ -42,7 +56,7 @@ const CoursePage = ({ navigation, route }) => {
             <View style={styles.innerContainer}>
                 <View style={styles.courseInfo}>
                     <Text style={styles.courseName}>{item.name} ({item.weight}%)</Text>    
-                    <Text style={styles.courseCredits}>{item.grade} / {item.totalMarks}</Text>
+                    <Text style={styles.courseCredits}>{displayGrade(item.percentage)}%</Text>
                 </View>
             </View>
         </TouchableOpacity>

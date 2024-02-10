@@ -120,6 +120,7 @@ router.patch('/item', async (req, res) => {
             weight: req.body.weight,
             totalMarks: req.body.totalMarks,
             grade: req.body.grade,
+            percentage: req.body.percentage,
             subItems: []
         };
         course.items.push(item);
@@ -145,6 +146,7 @@ router.patch('/item/edit', async (req, res) => {
         itemToUpdate.name = req.body.name;
         itemToUpdate.weight = req.body.weight;
         itemToUpdate.totalMarks = req.body.totalMarks;
+        itemToUpdate.percentage = req.body.percentage;
         itemToUpdate.grade = req.body.grade;
 
         await courseToUpdate.save();
@@ -214,6 +216,18 @@ router.patch('/item/subitem', async (req, res) => {
         }
 
         courseItem.subItems.push(subItem);
+
+        // Calculate updated grade of item        
+        let tempGrade = 0;
+        let tempWeight = 0;
+        
+        courseItem.subItems.forEach((item) => {
+            tempGrade += (item.grade / item.totalMarks) * item.weight;
+            tempWeight += item.weight;
+        })
+        
+        courseItem.percentage = tempGrade / tempWeight;
+        
         await course.save();
         res.status(200).json(subItem);
     } catch (err) {
@@ -235,6 +249,21 @@ router.delete('/item/subitem', async (req, res) => {
         const subItemToFind = itemToFind.subItems.find((subItem) => subItem.name === subItemName);
         const subItemToDeleteIndex = itemToFind.subItems.indexOf(subItemToFind);
         itemToFind.subItems.splice(subItemToDeleteIndex, 1);
+
+        if (itemToFind.subItems.length > 0) {
+            // Calculate updated grade of item        
+            let tempGrade = 0;
+            let tempWeight = 0;
+            
+            itemToFind.subItems.forEach((item) => {
+                tempGrade += (item.grade / item.totalMarks) * item.weight;
+                tempWeight += item.weight;
+            })
+            
+            itemToFind.percentage = tempGrade / tempWeight;
+        } else {
+            itemToFind.percentage = itemToFind.grade / itemToFind.totalMarks;
+        }
 
         await course.save();
         res.status(200).json(itemToFind);
