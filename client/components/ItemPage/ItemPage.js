@@ -17,6 +17,10 @@ const ItemPage = ({ navigation, route }) => {
     const [subItemToDelete, setSubItemToDelete] = useState("");
     const [addSubItemMenu, setAddSubItemMenu] = useState(false);
     const [deleteSubItemMenu, setDeleteSubItemMenu] = useState(false);
+    const [displaySubItemOptions, setDisplaySubItemOptions] = useState(false);
+    const [editSubItemMenu, setEditSubItemMenu] = useState(false);
+    const [editSubItemData, setEditSubItemData] = useState({});
+    const [selectedSubItem, setSelectedSubItem] = useState("");
 
     const { data, refetch } = useQuery({
         queryKey:["getSubItems"],
@@ -26,6 +30,19 @@ const ItemPage = ({ navigation, route }) => {
             })
     });
 
+    const openEditSubItemMenu = (item) => {
+
+        setEditSubItemData(item);
+        setEditSubItemMenu(true);
+        setAddSubItemMenu(true);
+
+    };
+
+    const setSelectedSubItemID = (itemID) => {
+        setSelectedSubItem(itemID);
+        setDisplaySubItemOptions(true);
+    };
+    
     const deleteSubItem = (subItemName) => {
         setSubItemToDelete(subItemName);
         setDeleteSubItemMenu(true);
@@ -38,13 +55,47 @@ const ItemPage = ({ navigation, route }) => {
     
     const renderItem = ({ item }) => (
         <TouchableOpacity
-            onLongPress={() => deleteSubItem(item.name)}
+            onLongPress={() => setSelectedSubItemID(item._id)}
         >
             <View style={styles.innerContainer}>
                 <View style={styles.courseInfo}>
                     <Text style={styles.courseName}>{item.name} ({item.weight}%)</Text>    
                     <Text style={styles.courseCredits}>{item.grade} / {item.totalMarks}</Text>
                 </View>
+                {displaySubItemOptions && selectedSubItem === item._id ? (
+                <View style={styles.displaySubItemOptionsContainer}>
+                    <TouchableOpacity>
+                        <AntIcon 
+                            style={styles.editSubItemButton}
+                            size={20}
+                            name="edit" 
+                            backgroundColor={route.params.item.colour}
+                            onPress={() => openEditSubItemMenu(item)}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <AntIcon 
+                            style={styles.editSubItemButton}
+                            size={20}
+                            name="delete" 
+                            backgroundColor={route.params.item.colour}
+                            onPress={() => deleteSubItem(item.name)}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <AntIcon 
+                            style={styles.editSubItemButton}
+                            size={20}
+                            name="back" 
+                            backgroundColor={route.params.item.colour}
+                            onPress={() => {
+                                setSelectedSubItem("");
+                                setDisplaySubItemOptions(false);
+                            }}
+                        />
+                    </TouchableOpacity>
+                </View>
+                ) : (<></>)}
             </View>
         </TouchableOpacity>
     );
@@ -57,6 +108,9 @@ const ItemPage = ({ navigation, route }) => {
                     itemName={route.params.item.name}
                     refetch={refetch}
                     setAddSubItemMenu={setAddSubItemMenu}
+                    editSubItemMenu={editSubItemMenu}
+                    setEditSubItemMenu={setEditSubItemMenu}
+                    editSubItemData={editSubItemData}
                 />
             ) : (<></>)}
             {deleteSubItemMenu ? (

@@ -15,10 +15,11 @@ const AddItemMenu = ({ courseName, refetch, setAddItemMenu, editItemMenu, setEdi
 
       const newItem = {
         courseName: courseName,
-        itemName: itemName,
+        itemName: itemName.trim(),
         weight: Number(itemWeight),
         totalMarks: Number(itemTotalMarks),
         grade: Number(itemGrade),
+        subItems: [],
         percentage: -1
       };
 
@@ -98,7 +99,7 @@ const AddItemMenu = ({ courseName, refetch, setAddItemMenu, editItemMenu, setEdi
             </View>
             <View style={styles.addItemButtonContainer}>
               <Button 
-                title="Add Item" 
+                title={editItemMenu ? "Edit Item" : "Add Item"}
                 onPress={saveData}
               />
             </View>
