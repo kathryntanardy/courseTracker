@@ -82,6 +82,15 @@ export const addSubItem = async (courseItemData) => {
     .catch((err) => err.message);
 };
 
+// Edit subitem in item
+export const editSubItem = async (subItemData) => {
+    return await axios.patch(`${url}/item/subitem/edit`, subItemData)
+    .then((res) => {
+        return res.data;
+    })
+    .catch((err) => err.message);
+};
+
 // Delete subItem from item
 export const deleteSubItem = async (courseItemData) => {
     return await axios.delete(`${url}/item/subitem`, { data: courseItemData })

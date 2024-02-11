@@ -246,6 +246,42 @@ router.patch('/item/subitem', async (req, res) => {
 
 });
 
+// Edit subtitem in an item
+router.patch('/item/subitem/edit', async (req, res) => {
+
+    const courseName = req.body.courseName;
+    const itemName = req.body.itemName;
+    const subItemName = req.body.subItemName;
+
+    try {
+        const course = await Course.findOne({ name: courseName });
+        const itemToFind = course.items.find((item) => item.name === itemName);
+        const subItemToFind = itemToFind.subItems.find((subItem) => subItem.name === subItemName);
+    
+        subItemToFind.name = req.body.name;
+        subItemToFind.weight = req.body.weight;
+        subItemToFind.totalMarks = req.body.totalMarks;
+        subItemToFind.grade = req.body.grade;
+
+        let tempGrade = 0;
+        let tempWeight = 0;
+
+        itemToFind.subItems.forEach((item) => {
+            tempGrade += (item.grade / item.totalMarks) * item.weight;
+            tempWeight += item.weight;
+        });
+
+        itemToFind.percentage = tempGrade / tempWeight;
+        await course.save();
+        
+        res.status(200).json(itemToFind);
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+
+});
+
 // Delete subitem from an item
 router.delete('/item/subitem', async (req, res) => {
 

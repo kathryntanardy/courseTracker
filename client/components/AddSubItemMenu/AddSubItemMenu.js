@@ -1,83 +1,103 @@
 import { View, Text, Button, TextInput } from 'react-native';
 import { useState } from 'react';
-import { addSubItem } from '../../functions.js';
+import { addSubItem, editSubItem } from '../../functions.js';
 import styles from './AddSubItemMenuStyles.js';
 
-const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu }) => {
+const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, editSubItemMenu, setEditSubItemMenu, editSubItemData }) => {
 
-  const [subName, setSubName] = useState("");
-  const [subWeight, setSubWeight] = useState("");
-  const [subTotalMarks, setSubTotalMarks] = useState("");
-  const [subGrade, setSubGrade] = useState("");
+  const [subItemName, setSubItemName] = useState(editSubItemMenu ? editSubItemData.name : "");
+  const [oldSubItemName, setOldSubItemName] = useState(editSubItemMenu ? editSubItemData.name : "");
+  const [subItemWeight, setSubItemWeight] = useState(editSubItemMenu ? editSubItemData.weight.toString() : "");
+  const [subItemTotalMarks, setSubItemTotalMarks] = useState(editSubItemMenu ? editSubItemData.totalMarks.toString() : "");
+  const [subItemGrade, setSubItemGrade] = useState(editSubItemMenu ? editSubItemData.grade.toString() : "");
 
-  const addNewSubItem = async () => {
+  const saveSubItemData = async () => {
 
     const newSubItemData = {
       courseName: courseName,
       itemName: itemName,
-      name: subName,
-      weight: Number(subWeight),
-      totalMarks: Number(subTotalMarks),
-      grade: Number(subGrade)
+      name: subItemName,
+      weight: Number(subItemWeight),
+      totalMarks: Number(subItemTotalMarks),
+      grade: Number(subItemGrade)
     };
 
     try {
-      await addSubItem(newSubItemData);
+
+      if (editSubItemMenu) {
+        newSubItemData.subItemName = oldSubItemName;
+        newSubItemData.name = subItemName;
+        await editSubItem(newSubItemData);
+      } else {
+        await addSubItem(newSubItemData); 
+      }
+
       refetch();
       setAddSubItemMenu(false);
+      setEditSubItemMenu(false);
     } catch (err) {
       console.log(err.message);
     }
-
   };
   
+  const cancelButton = () => {
+
+    setAddSubItemMenu(false);
+    setEditSubItemMenu(false);
+
+  }
+
   return (
     <View style={styles.mainView}>
       <View style={styles.formView}>
         <View style={styles.addSubItemContainer}>
           <Text style={styles.addSubItemText}>
-            Add a New SubItem
+            {editSubItemMenu ? `Edit ${editSubItemData.name}` : "Add a new SubItem"}
           </Text>
         </View>
         <View style={styles.addSubItemInputContainer}>
           <TextInput
             style={styles.addSubItemInput}
             placeholder="Name"
-            onChangeText={name => setSubName(name)}
+            value={subItemName}
+            onChangeText={name => setSubItemName(name)}
           />
         </View>
         <View style={styles.addSubItemInputContainer}>
           <TextInput
             style={styles.addSubItemInput}
             placeholder="Weight"
-            onChangeText={weight => setSubWeight(weight)}
+            value={subItemWeight}
+            onChangeText={weight => setSubItemWeight(weight)}
           />
         </View>
         <View style={styles.addSubItemInputContainer}>
           <TextInput
             style={styles.addSubItemInput}
             placeholder="Total Marks"
-            onChangeText={marks => setSubTotalMarks(marks)}
+            value={subItemTotalMarks}
+            onChangeText={marks => setSubItemTotalMarks(marks)}
           />
         </View>
         <View style={styles.addSubItemInputContainer}>
           <TextInput
             style={styles.addSubItemInput}
             placeholder="Grade"
-            onChangeText={grade => setSubGrade(grade)}
+            value={subItemGrade}
+            onChangeText={grade => setSubItemGrade(grade)}
           />
         </View>
         <View style={styles.addSubItemButtonContainer}>
           <Button 
-            title="Add SubItem" 
-            onPress={addNewSubItem}
+            title={editSubItemMenu ? "Edit SubItem" : "Add SubItem"}
+            onPress={saveSubItemData}
           />
         </View>
         <View style={styles.addSubItemButtonContainer}>
           <Button
             title="Cancel" 
             color="#c70000"
-            onPress={() => setAddSubItemMenu(false)}
+            onPress={cancelButton}
           />
         </View>
       </View>
