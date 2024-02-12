@@ -1,31 +1,53 @@
 import { View, Text, Button, TextInput } from 'react-native'
 import { useState } from 'react'
-import { addCourse } from '../../functions.js';
+import { addCourse, editCourse } from '../../functions.js';
 import styles from './AddCourseMenuStyles.js';
-import ColorPicker, { Panel3, BrightnessSlider, Swatches, Preview, OpacitySlider, HueSlider } from 'reanimated-color-picker';
+import ColorPicker, { Panel3, BrightnessSlider } from 'reanimated-color-picker';
 
-const AddCourseMenu = ({ setAddCourseMenu, refetch }) => {
+const AddCourseMenu = ({ setAddCourseMenu, refetch, editCourseData, editCourseMenu, setEditCourseMenu }) => {
 
-  const [courseName, setCourseName] = useState("");
-  const [credits, setCredits] = useState("");
-  const [courseColour, setCourseColour] = useState("");
+  const [courseName, setCourseName] = useState(editCourseMenu ? editCourseData.name : "");
+  const [oldCourseName, setOldCourseName] = useState(editCourseMenu ? editCourseData.name : "");
+  const [courseCredits, setCourseCredits] = useState(editCourseMenu ? editCourseData.credits.toString() : "");
+  const [courseColour, setCourseColour] = useState(editCourseMenu ? editCourseData.colour : "#ffffff");
 
   const addNewCourse = async () => {
 
-    const newCourseData = {
-      name: courseName,
-      items: [],
-      credits: Number(credits),
-      colour: courseColour
-    }
-
     try {
-      await addCourse(newCourseData);
+
+      if (editCourseMenu) {
+
+        const editCourseData = {
+          courseName: oldCourseName,
+          name: courseName,
+          credits: Number(courseCredits),
+          colour: courseColour
+        };
+
+        await editCourse(editCourseData);
+      } else {
+
+        const newCourseData = {
+          name: courseName,
+          items: [],
+          credits: Number(courseCredits),
+          colour: courseColour
+        }
+
+        await addCourse(newCourseData);
+      }
+
       refetch();
       setAddCourseMenu(false);
+      setEditCourseMenu(false);
     } catch (err) {
       console.log(err.message);
     }
+  };
+
+  const cancelButton = () => {
+    setAddCourseMenu(false);
+    setEditCourseMenu(false);
   };
 
   return (
@@ -33,13 +55,14 @@ const AddCourseMenu = ({ setAddCourseMenu, refetch }) => {
       <View style={styles.formView}>
         <View style={styles.addCourseContainer}>
           <Text style={styles.addCourseText}>
-            Add a New Course
+            {editCourseMenu ? `Edit ${editCourseData.name}` : "Add a New Course"}
           </Text>
         </View>
         <View style={styles.addCourseInputContainer}>
           <TextInput
             style={styles.addCourseInput}
             placeholder="Course Name"
+            value={courseName}
             onChangeText={name => setCourseName(name)}
           />
         </View>
@@ -47,12 +70,14 @@ const AddCourseMenu = ({ setAddCourseMenu, refetch }) => {
           <TextInput
             style={styles.addCourseInput}
             placeholder="Number of Credits"
-            onChangeText={numCredits => setCredits(numCredits)}
+            value={courseCredits}
+            onChangeText={numCredits => setCourseCredits(numCredits)}
           />
         </View>
         <View>
           <ColorPicker 
             style={styles.colorPickerContainer}
+            value={courseColour}
             onChange={({ hex }) => setCourseColour(hex)}
           >
             <Panel3 centerChannel='saturation' />
@@ -61,7 +86,7 @@ const AddCourseMenu = ({ setAddCourseMenu, refetch }) => {
         </View>
         <View style={styles.addCourseButtonContainer}>
           <Button 
-            title="Add Course" 
+            title={editCourseMenu ? "Edit Course" : "Add Course"} 
             onPress={addNewCourse}
           />
         </View>
@@ -69,7 +94,7 @@ const AddCourseMenu = ({ setAddCourseMenu, refetch }) => {
           <Button
             title="Cancel" 
             color="#c70000"
-            onPress={() => setAddCourseMenu(false)}
+            onPress={cancelButton}
           />
         </View>
       </View>

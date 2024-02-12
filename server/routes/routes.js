@@ -36,19 +36,17 @@ router.post('/', async (req, res) => {
 });
 
 // Update Course
-router.put('/', async (req, res) => {
+router.patch('/', async (req, res) => {
 
     const courseName = req.body.courseName;
-    const newName = req.body.newName;
-    const newItems = req.body.newItems;
-    const newCredits = req.body.newCredits;
-    const newColour = req.body.newColour;
+    const newName = req.body.name;
+    const newCredits = req.body.credits;
+    const newColour = req.body.colour;
 
     try {
 
         const courseToUpdate = await Course.findOne({ name: courseName });
         courseToUpdate.name = newName;
-        courseToUpdate.items = newItems;
         courseToUpdate.credits = newCredits;
         courseToUpdate.colour = newColour;
 
