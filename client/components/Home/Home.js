@@ -25,6 +25,10 @@ export default function CourseContent({ navigation }) {
     const [addCourseMenu, setAddCourseMenu] = useState(false);
     const [deleteCourseMenu, setDeleteCourseMenu] = useState(false);
     const [courseToDelete, setCourseToDelete] = useState('');
+    const [displayCourseOptions, setDisplayCourseOptions] = useState(false);
+    const [selectedCourse, setSelectedCourse] = useState("");
+    const [editCourseData, setEditCourseData] = useState({});
+    const [editCourseMenu, setEditCourseMenu] = useState(false);
 
     const handlePress = (subject) => {
         navigation.navigate('Course', subject);
@@ -39,17 +43,64 @@ export default function CourseContent({ navigation }) {
         setDeleteCourseMenu(true);
     }
 
+    const setSelectedCourseID = (itemID) => {
+        setSelectedCourse(itemID);
+        setDisplayCourseOptions(true);
+    };
+
+    const openEditCourseMenu = (courseToEdit) => {
+        setEditCourseData(courseToEdit);
+        setEditCourseMenu(true);
+        setAddCourseMenu(true);
+    };
+
     const renderItem = ({ item }) => (
         <TouchableOpacity 
             onPress={() => handlePress(item)}
-            onLongPress={() => deleteCourse(item.name)}
+            onLongPress={() => setSelectedCourseID(item._id)}
         >
-            <View style={styles.innerContainer}>
-                <View style={[styles.courseColourCircle, { backgroundColor: item.colour }]}  />
-                <View style={styles.courseInfo}>
-                    <Text style={styles.courseName}>{item.name}</Text>    
-                    <Text style={styles.courseCredits}>{item.credits}</Text>
+            <View style={styles.outerContainer}>
+                <View style={styles.innerContainer}>
+                    <View style={[styles.courseColourCircle, { backgroundColor: item.colour }]}  />
+                    <View style={styles.courseInfo}>
+                        <Text style={styles.courseName}>{item.name}</Text>    
+                        <Text style={styles.courseCredits}>{item.credits}</Text>
+                    </View>
                 </View>
+                {displayCourseOptions && selectedCourse === item._id ? (
+                <View style={styles.displayItemOptionsContainer}>
+                    <TouchableOpacity>
+                        <AntIcon 
+                            style={styles.editItemButton}
+                            size={20}
+                            name="edit" 
+                            backgroundColor={item.colour}
+                            onPress={() => openEditCourseMenu(item)}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <AntIcon 
+                            style={styles.editItemButton}
+                            size={20}
+                            name="delete" 
+                            backgroundColor={item.colour}
+                            onPress={() => deleteCourse(item.name)}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <AntIcon 
+                            style={styles.editItemButton}
+                            size={20}
+                            name="back" 
+                            backgroundColor={item.colour}
+                            onPress={() => {
+                                setSelectedCourse("");
+                                setDisplayCourseOptions(false);
+                            }}
+                        />
+                    </TouchableOpacity>
+                </View>
+                ) : (<></>)}
             </View>
         </TouchableOpacity>
     );
@@ -60,8 +111,10 @@ export default function CourseContent({ navigation }) {
                 <AddCourseMenu 
                     setAddCourseMenu={setAddCourseMenu}
                     refetch={refetch}
-                /> : 
-                (<></>)
+                    editCourseData={editCourseData}
+                    editCourseMenu={editCourseMenu}
+                    setEditCourseMenu={setEditCourseMenu}
+                /> : (<></>)
             }
             {deleteCourseMenu ?
                 <DeleteCourseMenu 

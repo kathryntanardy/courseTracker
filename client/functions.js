@@ -20,6 +20,15 @@ export const addCourse = async (newCourseData) => {
     .catch((err) => err.message);
 };
 
+// Edit a course
+export const editCourse = async (courseData) => {
+    return await axios.patch(url, courseData)
+    .then((res) => {
+        return res.data;
+    })
+    .catch((err) => err.message);
+};
+
 // Delete a course
 export const deleteCourse = async (courseData) => {
     return await axios.delete(url, { data: courseData })
@@ -47,6 +56,7 @@ export const addItem = async (newItemData) => {
     .catch((err) => err.message);
 }
 
+// Edit a course item
 export const editItem = async (itemData) => {
     return await axios.patch(`${url}/item/edit`, itemData)
     .then((res) => {

@@ -20,6 +20,11 @@ const styles = StyleSheet.create({
     divBox: {
         padding: 15,
     },
+    outerContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
     innerContainer: {
         flexDirection: 'row',
         alignItems: 'center'
@@ -77,7 +82,19 @@ const styles = StyleSheet.create({
         width: 40,
         borderRadius: 25,
         backgroundColor: 'black'
-    }
+    },
+    displayItemOptionsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '40%',
+        alignItems: 'center'
+    },
+    editItemButton: {
+        color: "white",
+        borderRadius: 10,
+        padding: 5
+    },
 });
 
 export default styles;
