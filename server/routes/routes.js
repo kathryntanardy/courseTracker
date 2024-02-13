@@ -3,11 +3,27 @@ const router = express.Router();
 const Course = require('../models/models');
 
 // Get all courses
-router.get('/', async (req, res) => {
+router.get('/allcourses', async (req, res) => {
 
     try {
         const courseList = await Course.find();
         res.status(200).json(courseList);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+
+});
+
+// Get a specific course
+router.get('/', async (req, res) => {
+
+    const courseName = req.query.courseName;
+
+    try {
+
+        const course = await Course.findOne({ name: courseName });
+        res.status(200).json(course);
+
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -22,8 +38,9 @@ router.post('/', async (req, res) => {
         name: req.body.name,
         items: req.body.items,
         credits: req.body.credits,
-        colour: req.body.colour
-
+        colour: req.body.colour,
+        grade: 0,
+        progress: 0
     });
 
     try {
@@ -157,6 +174,11 @@ router.patch('/item/edit', async (req, res) => {
             itemToUpdate.percentage = -1;
         }
 
+        const { newCourseGrade, newCourseProgress } = calculateCourseGradeAndProgress(course.items);
+            
+        course.grade = newCourseGrade;
+        course.progress = newCourseProgress;
+
         await courseToUpdate.save();
         res.status(200).json(itemToUpdate);
         
@@ -175,6 +197,11 @@ router.delete('/item', async (req, res) => {
         const itemToDelete = course.items.find((item) => item.name === req.body.itemName);
         const itemToDeleteIndex = course.items.indexOf(itemToDelete);
         course.items.splice(itemToDeleteIndex, 1);
+
+        const { newCourseGrade, newCourseProgress } = calculateCourseGradeAndProgress(course.items);
+            
+        course.grade = newCourseGrade;
+        course.progress = newCourseProgress;
 
         await course.save();
         res.status(200).json({ message: "Successfully deleted item" });
@@ -235,6 +262,11 @@ router.patch('/item/subitem', async (req, res) => {
         })
         
         courseItem.percentage = tempGrade / tempWeight;
+
+        const { newCourseGrade, newCourseProgress } = calculateCourseGradeAndProgress(course.items);
+
+        course.grade = newCourseGrade;
+        course.progress = newCourseProgress;
         
         await course.save();
         res.status(200).json(subItem);
@@ -270,6 +302,12 @@ router.patch('/item/subitem/edit', async (req, res) => {
         });
 
         itemToFind.percentage = tempGrade / tempWeight;
+        
+        const { newCourseGrade, newCourseProgress } = calculateCourseGradeAndProgress(course.items);
+            
+        course.grade = newCourseGrade;
+        course.progress = newCourseProgress;
+
         await course.save();
         
         res.status(200).json(itemToFind);
@@ -314,6 +352,11 @@ router.delete('/item/subitem', async (req, res) => {
             }
         }
 
+        const { newCourseGrade, newCourseProgress } = calculateCourseGradeAndProgress(course.items);
+            
+        course.grade = newCourseGrade;
+        course.progress = newCourseProgress;
+
         await course.save();
         res.status(200).json(itemToFind);
 
@@ -322,5 +365,35 @@ router.delete('/item/subitem', async (req, res) => {
     }
 
 });
+
+// Calculate course grade
+const calculateCourseGradeAndProgress = (courseItemList) => {
+
+    if (courseItemList.length === 0) {
+        return { newCourseGrade: 0, newCourseProgress: 0 };
+    }
+
+    let tempGrade = 0;
+    let tempWeight = 0;
+
+    courseItemList.forEach((item) => {
+
+        if (item.subItems.length === 0) {
+            return;
+        }
+
+        item.subItems.forEach((subItem) => {
+            tempGrade += (subItem.grade / subItem.totalMarks) * subItem.weight;
+            tempWeight += subItem.weight;
+        });
+    });
+
+    if (tempWeight === 0) {
+        return { newCourseGrade: 0, newCourseProgress: 0 };
+    }
+
+    return { newCourseGrade: tempGrade / tempWeight, newCourseProgress: tempWeight / 100 };
+
+};
 
 module.exports = router;

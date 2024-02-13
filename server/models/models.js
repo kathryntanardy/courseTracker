@@ -57,6 +57,14 @@ const courseSchema = new mongoose.Schema({
         required: true,
         validator: Number.isInteger
     },
+    grade: {
+        type: Number,
+        required: true
+    },
+    progress: {
+        type: Number,
+        required: true
+    },
     colour: {
         type: String,
         required: true

@@ -3,9 +3,10 @@ import { View, Text, StatusBar, TouchableOpacity, FlatList, Button } from 'react
 import styles from './CoursePageStyles.js';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import { useQuery } from 'react-query';
-import { getItems } from '../../functions.js';
+import { getCourse } from '../../functions.js';
 import AddItemMenu from '../AddItemMenu/AddItemMenu.js';
 import DeleteItemMenu from '../DeleteItemMenu/DeleteItemMenu.js';
+import * as Progress from 'react-native-progress';
 
 const Separator = () => <View style={styles.separator} />;
 const CoursePage = ({ navigation, route }) => {
@@ -19,13 +20,13 @@ const CoursePage = ({ navigation, route }) => {
     const [itemToDelete, setItemToDelete] = useState("");
 
     const { data, refetch } = useQuery({
-        queryKey: ["getItems"],
-        queryFn: () => getItems(route.params.name),
-    });
+        queryKey: "getCourse",
+        queryFn: () => getCourse(route.params.name)
+    })
 
     const handlePress = (item) => {
-        item.courseName = route.params.name;
-        item.colour = route.params.colour;
+        item.courseName = data.name;
+        item.colour = data.colour;
         navigation.navigate('Item', {
             item: item,
             refetch: () => refetch()
@@ -88,7 +89,7 @@ const CoursePage = ({ navigation, route }) => {
                             style={styles.editItemButton}
                             size={20}
                             name="edit" 
-                            backgroundColor={route.params.colour}
+                            backgroundColor={data?.colour}
                             onPress={() => openEditItemMenu(item)}
                         />
                     </TouchableOpacity>
@@ -97,7 +98,7 @@ const CoursePage = ({ navigation, route }) => {
                             style={styles.editItemButton}
                             size={20}
                             name="delete" 
-                            backgroundColor={route.params.colour}
+                            backgroundColor={data?.colour}
                             onPress={() => deleteItem(item.name)}
                         />
                     </TouchableOpacity>
@@ -106,7 +107,7 @@ const CoursePage = ({ navigation, route }) => {
                             style={styles.editItemButton}
                             size={20}
                             name="back" 
-                            backgroundColor={route.params.colour}
+                            backgroundColor={data?.colour}
                             onPress={() => {
                                 setSelectedItem("");
                                 setDisplayItemOptions(false);
@@ -123,7 +124,7 @@ const CoursePage = ({ navigation, route }) => {
         <View style={{ marginTop: StatusBar.currentHeight, height: '100%' }}>
             {addItemMenu ? (
                 <AddItemMenu 
-                    courseName={route.params.name}
+                    courseName={data?.name}
                     refetch={refetch}
                     setAddItemMenu={setAddItemMenu}
                     editItemMenu={editItemMenu}
@@ -133,13 +134,13 @@ const CoursePage = ({ navigation, route }) => {
             ) : (<></>)}
             {deleteItemMenu ? (
                 <DeleteItemMenu
-                    courseName={route.params.name}
+                    courseName={data?.name}
                     itemName={itemToDelete}
                     refetch={refetch}
                     setDeleteItemMenu={setDeleteItemMenu}
                 />
             ) : (<></>)}
-            <View style={[styles.headerContainer, { backgroundColor: route.params.colour }]}>
+            <View style={[styles.headerContainer, { backgroundColor: data?.colour }]}>
                 <View style={styles.backButtonWrapper}>
                     <TouchableOpacity onPress={goBack} >
                         <AntIcon name="back" color="white" size={30} />
@@ -147,20 +148,46 @@ const CoursePage = ({ navigation, route }) => {
                 </View>
                 <View style={styles.headerTextWrapper}>
                     <Text style={styles.headerText}>
-                        {route.params.name}
+                        {data?.name}
                     </Text>
                 </View>
+                <View style={styles.addItemButtonContainer}>
+                    <TouchableOpacity onPress={() => setAddItemMenu(true)}>
+                        <AntIcon name="pluscircleo" color="white" size={30} />
+                    </TouchableOpacity>
+                </View>
             </View>
-            <View>
-                <Button
-                    title="Add Item"
-                    onPress={() => setAddItemMenu(true)}
-                />
+            <View style={styles.courseProgressDisplayContainer}>
+                <View style={styles.courseProgressGrade}>
+                    <Progress.Circle 
+                        color={data?.colour}
+                        unfilledColor='lightgrey'
+                        borderWidth={0}
+                        size={100} 
+                        progress={data?.grade} 
+                        showsText 
+                        formatText={() => `Grade: ${displayGrade(data?.grade)}`} 
+                        textStyle={styles.progressCircleText}
+                    />
+                </View>
+                <View style={styles.courseProgressVerticalLine} />
+                <View style={styles.courseProgressPercentage}>
+                    <Progress.Circle 
+                        color={data?.colour}
+                        unfilledColor='lightgrey'
+                        borderWidth={0}
+                        size={100} 
+                        progress={data?.progress} 
+                        showsText 
+                        formatText={() => `Progress: ${displayGrade(data?.progress)}`} 
+                        textStyle={styles.progressCircleText}
+                    />
+                </View>
             </View>
             <View style={styles.flatListContainer}>
                 <FlatList
                     style={styles.flatListItem}
-                    data={data}
+                    data={data?.items}
                     keyExtractor={item => item._id}
                     renderItem={renderItem}
                     ItemSeparatorComponent={Separator}
