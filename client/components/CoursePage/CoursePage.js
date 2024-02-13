@@ -46,10 +46,12 @@ const CoursePage = ({ navigation, route }) => {
         setDeleteItemMenu(true);
     }
 
-    const displayGrade = (itemPercentage) => {
+    const displayGrade = (itemPercentage, isNotCircle = true) => {
 
-        if (itemPercentage === -1) {
-            return "";
+        if (isNotCircle) {
+            if (itemPercentage === -1) {
+                return "";
+            }
         }
 
         itemPercentage *= 100;
@@ -79,7 +81,7 @@ const CoursePage = ({ navigation, route }) => {
                 <View style={styles.courseInfo}>
                     <Text style={styles.courseName}>{item.name} ({item.weight}%)</Text>    
                     <Text style={styles.courseCredits}>
-                        {displayGrade(item.percentage)}
+                        {displayGrade(item.grade)}
                     </Text>
                 </View>
                 {displayItemOptions && selectedItem === item._id ? (
@@ -166,7 +168,7 @@ const CoursePage = ({ navigation, route }) => {
                         size={100} 
                         progress={data?.grade} 
                         showsText 
-                        formatText={() => `Grade: ${displayGrade(data?.grade)}`} 
+                        formatText={() => `Grade: ${displayGrade(data?.grade, false)}`} 
                         textStyle={styles.progressCircleText}
                     />
                 </View>
@@ -179,7 +181,7 @@ const CoursePage = ({ navigation, route }) => {
                         size={100} 
                         progress={data?.progress} 
                         showsText 
-                        formatText={() => `Progress: ${displayGrade(data?.progress)}`} 
+                        formatText={() => `Progress: ${displayGrade(data?.progress, false)}`} 
                         textStyle={styles.progressCircleText}
                     />
                 </View>

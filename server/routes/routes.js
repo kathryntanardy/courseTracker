@@ -36,11 +36,11 @@ router.post('/', async (req, res) => {
     const newCourse = new Course({
 
         name: req.body.name,
-        items: req.body.items,
         credits: req.body.credits,
         colour: req.body.colour,
         grade: 0,
-        progress: 0
+        progress: 0,
+        items: req.body.items
     });
 
     try {
@@ -133,21 +133,17 @@ router.patch('/item', async (req, res) => {
         const item = {
             name: req.body.itemName,
             weight: req.body.weight,
-            totalMarks: req.body.totalMarks,
-            grade: req.body.grade,
-            percentage: req.body.percentage,
+            grade: -1,
+            progress: 0,
             subItems: []
         };
-
-        if (item.totalMarks !== -1 && item.grade !== -1) {
-            item.percentage = item.grade / item.totalMarks;
-        }
 
         course.items.push(item);
         await course.save();
         res.status(201).json(course);
 
     } catch (err) {
+        console.log(err.message);
         res.json({ message: err.message });
     }
 });
@@ -160,29 +156,22 @@ router.patch('/item/edit', async (req, res) => {
 
     try {
 
-        const courseToUpdate = await Course.findOne({ name: courseName });
-        const itemToUpdate = courseToUpdate.items.find((item) => item.name === itemName);
+        const course = await Course.findOne({ name: courseName });
+        const itemToUpdate = course.items.find((item) => item.name === itemName);
 
         itemToUpdate.name = req.body.name;
         itemToUpdate.weight = req.body.weight;
-        itemToUpdate.totalMarks = req.body.totalMarks;
-        itemToUpdate.grade = req.body.grade;
-
-        if (itemToUpdate.totalMarks !== -1 && itemToUpdate.grade !== -1) {
-            itemToUpdate.percentage = itemToUpdate.grade / itemToUpdate.totalMarks;
-        } else {
-            itemToUpdate.percentage = -1;
-        }
 
         const { newCourseGrade, newCourseProgress } = calculateCourseGradeAndProgress(course.items);
             
         course.grade = newCourseGrade;
         course.progress = newCourseProgress;
 
-        await courseToUpdate.save();
+        await course.save();
         res.status(200).json(itemToUpdate);
         
     } catch (err) {
+        console.log(err.message);
         res.status(500).json({ message: err.message });
     }
 
@@ -247,21 +236,15 @@ router.patch('/item/subitem', async (req, res) => {
             name: req.body.name,
             weight: req.body.weight,
             totalMarks: req.body.totalMarks,
-            grade: req.body.grade
+            marksGiven: req.body.marksGiven
         }
 
         courseItem.subItems.push(subItem);
 
-        // Calculate updated grade of item        
-        let tempGrade = 0;
-        let tempWeight = 0;
-        
-        courseItem.subItems.forEach((item) => {
-            tempGrade += (item.grade / item.totalMarks) * item.weight;
-            tempWeight += item.weight;
-        })
-        
-        courseItem.percentage = tempGrade / tempWeight;
+        const { newItemGrade, newItemProgress } = calculateItemGradeAndProgress(courseItem.subItems);
+
+        courseItem.grade = newItemGrade;
+        courseItem.progress = newItemProgress;
 
         const { newCourseGrade, newCourseProgress } = calculateCourseGradeAndProgress(course.items);
 
@@ -271,6 +254,7 @@ router.patch('/item/subitem', async (req, res) => {
         await course.save();
         res.status(200).json(subItem);
     } catch (err) {
+        console.log(err.message);
         res.status(500).json({ message: err.message });
     }
 
@@ -291,18 +275,13 @@ router.patch('/item/subitem/edit', async (req, res) => {
         subItemToFind.name = req.body.name;
         subItemToFind.weight = req.body.weight;
         subItemToFind.totalMarks = req.body.totalMarks;
-        subItemToFind.grade = req.body.grade;
+        subItemToFind.marksGiven = req.body.marksGiven;
 
-        let tempGrade = 0;
-        let tempWeight = 0;
+        const { newItemGrade, newItemProgress } = calculateItemGradeAndProgress(itemToFind.subItems);
 
-        itemToFind.subItems.forEach((item) => {
-            tempGrade += (item.grade / item.totalMarks) * item.weight;
-            tempWeight += item.weight;
-        });
+        itemToFind.grade = newItemGrade;
+        itemToFind.progress = newItemProgress;
 
-        itemToFind.percentage = tempGrade / tempWeight;
-        
         const { newCourseGrade, newCourseProgress } = calculateCourseGradeAndProgress(course.items);
             
         course.grade = newCourseGrade;
@@ -332,25 +311,10 @@ router.delete('/item/subitem', async (req, res) => {
         const subItemToDeleteIndex = itemToFind.subItems.indexOf(subItemToFind);
         itemToFind.subItems.splice(subItemToDeleteIndex, 1);
 
-        if (itemToFind.subItems.length > 0) {
-            // Calculate updated grade of item        
-            let tempGrade = 0;
-            let tempWeight = 0;
-            
-            itemToFind.subItems.forEach((item) => {
-                tempGrade += (item.grade / item.totalMarks) * item.weight;
-                tempWeight += item.weight;
-            })
-            
-            itemToFind.percentage = tempGrade / tempWeight;
-        } else {
+        const { newItemGrade, newItemProgress } = calculateItemGradeAndProgress(itemToFind.subItems);
 
-            if (itemToFind.totalMarks !== -1) {
-                itemToFind.percentage = itemToFind.grade / itemToFind.totalMarks;
-            } else {
-                itemToFind.percentage = -1;
-            }
-        }
+        itemToFind.grade = newItemGrade;
+        itemToFind.progress = newItemProgress;
 
         const { newCourseGrade, newCourseProgress } = calculateCourseGradeAndProgress(course.items);
             
@@ -383,7 +347,7 @@ const calculateCourseGradeAndProgress = (courseItemList) => {
         }
 
         item.subItems.forEach((subItem) => {
-            tempGrade += (subItem.grade / subItem.totalMarks) * subItem.weight;
+            tempGrade += (subItem.marksGiven / subItem.totalMarks) * subItem.weight;
             tempWeight += subItem.weight;
         });
     });
@@ -393,6 +357,24 @@ const calculateCourseGradeAndProgress = (courseItemList) => {
     }
 
     return { newCourseGrade: tempGrade / tempWeight, newCourseProgress: tempWeight / 100 };
+};
+
+// Calculate item grade
+const calculateItemGradeAndProgress = (subItemList) => {
+
+    if (subItemList.length === 0) {
+        return { newItemGrade: 0, newItemProgress: 0 };
+    }
+
+    let tempGrade = 0;
+    let tempWeight = 0;
+
+    subItemList.forEach((subItem) => {
+        tempGrade += (subItem.marksGiven / subItem.totalMarks) * subItem.weight;
+        tempWeight += subItem.weight;
+    });
+
+    return { newItemGrade: tempGrade / tempWeight, newItemProgress: tempWeight };
 
 };
 

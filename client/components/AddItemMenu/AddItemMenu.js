@@ -8,8 +8,6 @@ const AddItemMenu = ({ courseName, refetch, setAddItemMenu, editItemMenu, setEdi
     const [itemName, setItemName] = useState(editItemMenu ? editItemData.name : "");
     const [oldItemName, setOldItemName] = useState(editItemMenu ? editItemData.name : "");
     const [itemWeight, setItemWeight] = useState(editItemMenu ? editItemData.weight.toString() : "");
-    const [itemTotalMarks, setItemTotalMarks] = useState(editItemMenu && editItemData.totalMarks !== -1 ? editItemData.totalMarks.toString() : "");
-    const [itemGrade, setItemGrade] = useState(editItemMenu && editItemData.grade !== -1 ? editItemData.grade.toString() : "");
 
     const saveData = async () => {
 
@@ -17,19 +15,7 @@ const AddItemMenu = ({ courseName, refetch, setAddItemMenu, editItemMenu, setEdi
         courseName: courseName,
         itemName: itemName.trim(),
         weight: Number(itemWeight),
-        totalMarks: Number(itemTotalMarks),
-        grade: Number(itemGrade),
-        subItems: [],
-        percentage: -1
       };
-
-      if (itemTotalMarks === "") {
-        newItem.totalMarks = -1;
-      }
-
-      if (itemGrade === "") {
-        newItem.grade = -1;
-      }
 
       try {
 
@@ -79,22 +65,6 @@ const AddItemMenu = ({ courseName, refetch, setAddItemMenu, editItemMenu, setEdi
                 placeholder="Weight"
                 value={itemWeight}
                 onChangeText={weight => setItemWeight(weight)}
-              />
-            </View>
-            <View style={styles.addItemInputContainer}>
-              <TextInput
-                style={styles.addItemInput}
-                placeholder="Total Marks"
-                value={itemTotalMarks}
-                onChangeText={marks => setItemTotalMarks(marks)}
-              />
-            </View>
-            <View style={styles.addItemInputContainer}>
-              <TextInput
-                style={styles.addItemInput}
-                placeholder="Grade"
-                value={itemGrade}
-                onChangeText={grade => setItemGrade(grade)}
               />
             </View>
             <View style={styles.addItemButtonContainer}>

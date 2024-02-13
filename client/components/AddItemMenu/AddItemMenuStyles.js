@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     },
     formView: {
         width: '80%',
-        height: 525,
+        height: 400,
         marginRight: '10%',
         marginLeft: '10%',
         marginTop: '10%',

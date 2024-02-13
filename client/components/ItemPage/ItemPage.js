@@ -60,7 +60,7 @@ const ItemPage = ({ navigation, route }) => {
             <View style={styles.innerContainer}>
                 <View style={styles.courseInfo}>
                     <Text style={styles.courseName}>{item.name} ({item.weight}%)</Text>    
-                    <Text style={styles.courseCredits}>{item.grade} / {item.totalMarks}</Text>
+                    <Text style={styles.courseCredits}>{item.marksGiven} / {item.totalMarks}</Text>
                 </View>
                 {displaySubItemOptions && selectedSubItem === item._id ? (
                 <View style={styles.displaySubItemOptionsContainer}>

@@ -6,6 +6,23 @@ const courseSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    credits: {
+        type: Number,
+        required: true,
+        validator: Number.isInteger
+    },
+    grade: {
+        type: Number,
+        required: true
+    },
+    progress: {
+        type: Number,
+        required: true
+    },
+    colour: {
+        type: String,
+        required: true
+    },
     items: {
         type: [{
             name: {
@@ -16,15 +33,11 @@ const courseSchema = new mongoose.Schema({
                 type: Number,
                 required: true
             },
-            totalMarks: {
-                type: Number,
-                required: true
-            },
             grade: {
                 type: Number,
                 required: true
             },
-            percentage: {
+            progress: {
                 type: Number,
                 required: true
             },
@@ -42,7 +55,7 @@ const courseSchema = new mongoose.Schema({
                         type: Number,
                         required: true
                     },
-                    grade: {
+                    marksGiven: {
                         type: Number,
                         required: true
                     }
@@ -52,23 +65,6 @@ const courseSchema = new mongoose.Schema({
         }],
         required: true
     },
-    credits: {
-        type: Number,
-        required: true,
-        validator: Number.isInteger
-    },
-    grade: {
-        type: Number,
-        required: true
-    },
-    progress: {
-        type: Number,
-        required: true
-    },
-    colour: {
-        type: String,
-        required: true
-    }
 });
 
 module.exports = mongoose.model('Course', courseSchema);

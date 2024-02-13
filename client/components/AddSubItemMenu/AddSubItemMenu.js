@@ -9,7 +9,7 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, edit
   const [oldSubItemName, setOldSubItemName] = useState(editSubItemMenu ? editSubItemData.name : "");
   const [subItemWeight, setSubItemWeight] = useState(editSubItemMenu ? editSubItemData.weight.toString() : "");
   const [subItemTotalMarks, setSubItemTotalMarks] = useState(editSubItemMenu ? editSubItemData.totalMarks.toString() : "");
-  const [subItemGrade, setSubItemGrade] = useState(editSubItemMenu ? editSubItemData.grade.toString() : "");
+  const [subItemMarksGiven, setSubItemMarksGiven] = useState(editSubItemMenu ? editSubItemData.marksGiven.toString() : "");
 
   const saveSubItemData = async () => {
 
@@ -19,7 +19,7 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, edit
       name: subItemName,
       weight: Number(subItemWeight),
       totalMarks: Number(subItemTotalMarks),
-      grade: Number(subItemGrade)
+      marksGiven: Number(subItemMarksGiven)
     };
 
     try {
@@ -83,8 +83,8 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, edit
           <TextInput
             style={styles.addSubItemInput}
             placeholder="Grade"
-            value={subItemGrade}
-            onChangeText={grade => setSubItemGrade(grade)}
+            value={subItemMarksGiven}
+            onChangeText={grade => setSubItemMarksGiven(grade)}
           />
         </View>
         <View style={styles.addSubItemButtonContainer}>
