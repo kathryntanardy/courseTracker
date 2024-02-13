@@ -4,7 +4,16 @@ const url = 'http://10.0.2.2:5000/coursetracker';
 
 // Get all courses
 export const getCourses = async () => {
-    return await axios.get(url)
+    return await axios.get(`${url}/allcourses`)
+    .then((res) => {
+        return res.data;
+    })
+    .catch((err) => err.message);
+};
+
+// Get a specific course
+export const getCourse = async (courseName) => {
+    return await axios.get(`${url}?courseName=${courseName}`)
     .then((res) => {
         return res.data;
     })
