@@ -171,9 +171,9 @@ const ItemPage = ({ navigation, route }) => {
                         unfilledColor='lightgrey'
                         borderWidth={0}
                         size={100}
-                        progress={data?.progress / (route.params.item.weight / 100)} 
+                        progress={data?.progress} 
                         showsText
-                        formatText={() => `Progress: ${displayGrade(data?.progress / (route.params.item.weight / 100))}`} 
+                        formatText={() => `Progress: ${displayGrade(data?.progress)}`} 
                         textStyle={styles.progressCircleText}
                     />
                 </View>
