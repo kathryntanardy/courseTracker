@@ -241,7 +241,7 @@ router.patch('/item/subitem', async (req, res) => {
 
         courseItem.subItems.push(subItem);
 
-        const { newItemGrade, newItemProgress } = calculateItemGradeAndProgress(courseItem.subItems);
+        const { newItemGrade, newItemProgress } = calculateItemGradeAndProgress(courseItem.subItems, courseItem.weight);
 
         courseItem.grade = newItemGrade;
         courseItem.progress = newItemProgress;
@@ -277,7 +277,7 @@ router.patch('/item/subitem/edit', async (req, res) => {
         subItemToFind.totalMarks = req.body.totalMarks;
         subItemToFind.marksGiven = req.body.marksGiven;
 
-        const { newItemGrade, newItemProgress } = calculateItemGradeAndProgress(itemToFind.subItems);
+        const { newItemGrade, newItemProgress } = calculateItemGradeAndProgress(itemToFind.subItems, itemToFind.weight);
 
         itemToFind.grade = newItemGrade;
         itemToFind.progress = newItemProgress;
@@ -311,7 +311,7 @@ router.delete('/item/subitem', async (req, res) => {
         const subItemToDeleteIndex = itemToFind.subItems.indexOf(subItemToFind);
         itemToFind.subItems.splice(subItemToDeleteIndex, 1);
 
-        const { newItemGrade, newItemProgress } = calculateItemGradeAndProgress(itemToFind.subItems);
+        const { newItemGrade, newItemProgress } = calculateItemGradeAndProgress(itemToFind.subItems, itemToFind.weight);
 
         itemToFind.grade = newItemGrade;
         itemToFind.progress = newItemProgress;
@@ -360,7 +360,7 @@ const calculateCourseGradeAndProgress = (courseItemList) => {
 };
 
 // Calculate item grade
-const calculateItemGradeAndProgress = (subItemList) => {
+const calculateItemGradeAndProgress = (subItemList, itemWeight) => {
 
     if (subItemList.length === 0) {
         return { newItemGrade: -1, newItemProgress: 0 };
@@ -374,7 +374,7 @@ const calculateItemGradeAndProgress = (subItemList) => {
         tempWeight += subItem.weight;
     });
 
-    return { newItemGrade: tempGrade / tempWeight, newItemProgress: tempWeight / 100 };
+    return { newItemGrade: tempGrade / tempWeight, newItemProgress: tempWeight / itemWeight };
 
 };
 
