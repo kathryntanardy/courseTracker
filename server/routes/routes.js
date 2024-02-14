@@ -113,8 +113,8 @@ router.get('/item', async (req, res) => {
 
     try {
 
-        const course = await Course.findOne({ name: req.body.courseName });
-        const courseItem = course.items.find((item) => item.name === req.body.itemName);
+        const course = await Course.findOne({ name: req.query.courseName });
+        const courseItem = course.items.find((item) => item.name === req.query.itemName);
         res.status(200).json(courseItem);
 
     } catch (err) {
@@ -363,7 +363,7 @@ const calculateCourseGradeAndProgress = (courseItemList) => {
 const calculateItemGradeAndProgress = (subItemList) => {
 
     if (subItemList.length === 0) {
-        return { newItemGrade: 0, newItemProgress: 0 };
+        return { newItemGrade: -1, newItemProgress: 0 };
     }
 
     let tempGrade = 0;
@@ -374,7 +374,7 @@ const calculateItemGradeAndProgress = (subItemList) => {
         tempWeight += subItem.weight;
     });
 
-    return { newItemGrade: tempGrade / tempWeight, newItemProgress: tempWeight };
+    return { newItemGrade: tempGrade / tempWeight, newItemProgress: tempWeight / 100 };
 
 };
 
