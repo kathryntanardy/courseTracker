@@ -56,6 +56,15 @@ export const getItems = async (courseData) => {
     .catch((err) => err.message);
 }
 
+// Get an item from a course
+export const getItem = async (courseData) => {
+    return await axios.get(`${url}/item?courseName=${courseData.courseName}&itemName=${courseData.itemName}`)
+    .then((res) => {
+        return res.data;
+    })
+    .catch((err) => err.message);
+};
+
 // Add a new item to a course
 export const addItem = async (newItemData) => {
     return await axios.patch(`${url}/item`, newItemData)

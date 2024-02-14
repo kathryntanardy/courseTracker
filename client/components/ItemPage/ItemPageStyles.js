@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
     },
     backButtonWrapper: {
-        marginRight: '80%'
+        marginRight: '70%'
     },
     flatListContainer: {
         width: '100%'
@@ -52,6 +52,30 @@ const styles = StyleSheet.create({
         width: '40%',
         marginRight: '10%',
         alignItems: 'center'
+    },
+    itemProgressDisplayContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginTop: 20,
+        marginBottom: 10,
+        marginHorizontal: 15,
+        paddingBottom: 20,
+        borderBottomColor: 'grey',
+        borderBottomWidth: 1
+    },
+    itemProgressGrade: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    itemProgressVerticalLine: {
+        backgroundColor: 'grey',
+        height: 75,
+        width: 2,
+        marginVertical: 10
+    },
+    progressCircleText: {
+        fontSize: 15
     }
 });
 

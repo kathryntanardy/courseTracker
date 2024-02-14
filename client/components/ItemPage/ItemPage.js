@@ -1,15 +1,13 @@
 import { View, Text, TouchableOpacity, StatusBar, FlatList, Button } from 'react-native'
 import { useState } from 'react'
-import { getSubItems } from '../../functions.js';
+import { getItem } from '../../functions.js';
 import { useQuery } from 'react-query';
-import AddCourseMenu from '../AddCourseMenu/AddCourseMenu.js';
-import DeleteCourseMenu from '../DeleteCourseMenu/DeleteCourseMenu.js';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 
 import styles from './ItemPageStyles.js';
-import { StackActions } from '@react-navigation/native';
 import AddSubItemMenu from '../AddSubItemMenu/AddSubItemMenu.js';
 import DeleteSubItemMenu from '../DeleteSubItemMenu/DeleteSubItemMenu.js';
+import * as Progress from 'react-native-progress';
 
 const Separator = () => <View style={styles.separator} />;
 const ItemPage = ({ navigation, route }) => {
@@ -23,19 +21,17 @@ const ItemPage = ({ navigation, route }) => {
     const [selectedSubItem, setSelectedSubItem] = useState("");
 
     const { data, refetch } = useQuery({
-        queryKey:["getSubItems"],
-        queryFn: () => getSubItems({ 
-                courseName: route.params.item.courseName,
-                itemName: route.params.item.name  
-            })
+        queryKey: "getItem",
+        queryFn: () => getItem({ 
+            courseName: route.params.item.courseName,
+            itemName: route.params.item.name 
+        })
     });
 
     const openEditSubItemMenu = (item) => {
-
         setEditSubItemData(item);
         setEditSubItemMenu(true);
         setAddSubItemMenu(true);
-
     };
 
     const setSelectedSubItemID = (itemID) => {
@@ -46,6 +42,22 @@ const ItemPage = ({ navigation, route }) => {
     const deleteSubItem = (subItemName) => {
         setSubItemToDelete(subItemName);
         setDeleteSubItemMenu(true);
+    };
+
+    const displayGrade = (itemGrade) => {
+
+        if (itemGrade === -1) {
+            return "0%";
+        }
+        
+        itemGrade *= 100;
+        
+        if (Number.isInteger(itemGrade)) {
+            return `${itemGrade}%`;
+        } else {
+            return `${itemGrade.toFixed(2)}%`;
+        }
+
     };
 
     const goBack = () => {
@@ -105,7 +117,7 @@ const ItemPage = ({ navigation, route }) => {
             {addSubItemMenu ? (
                 <AddSubItemMenu
                     courseName={route.params.item.courseName}
-                    itemName={route.params.item.name}
+                    itemName={data?.name}
                     refetch={refetch}
                     setAddSubItemMenu={setAddSubItemMenu}
                     editSubItemMenu={editSubItemMenu}
@@ -116,7 +128,7 @@ const ItemPage = ({ navigation, route }) => {
             {deleteSubItemMenu ? (
                 <DeleteSubItemMenu 
                     courseName={route.params.item.courseName}
-                    itemName={route.params.item.name}
+                    itemName={data?.name}
                     subItemName={subItemToDelete}
                     refetch={refetch}
                     setDeleteSubItemMenu={setDeleteSubItemMenu}
@@ -130,20 +142,46 @@ const ItemPage = ({ navigation, route }) => {
                 </View>
                 <View style={styles.headerTextWrapper}>
                     <Text style={styles.headerText}>
-                        {route.params.item.name}
+                        {data?.name}
                     </Text>
                 </View>
+                <View style={styles.addItemButtonContainer}>
+                    <TouchableOpacity onPress={() => setAddSubItemMenu(true)}>
+                        <AntIcon name="pluscircleo" color="white" size={30} />
+                    </TouchableOpacity>
+                </View>
             </View>
-            <View>
-                <Button
-                    title="Add SubItem"
-                    onPress={() => setAddSubItemMenu(true)}
-                />
+            <View style={styles.itemProgressDisplayContainer}>
+                <View style={styles.itemProgressGrade}>
+                    <Progress.Circle 
+                        color={route.params.item.colour}
+                        unfilledColor='lightgrey'
+                        borderWidth={0}
+                        size={100} 
+                        progress={data?.grade}
+                        showsText 
+                        formatText={() => `Grade: ${displayGrade(data?.grade)}`} 
+                        textStyle={styles.progressCircleText}
+                    />
+                </View>
+                <View style={styles.itemProgressVerticalLine} />
+                <View style={styles.itemProgressPercentage}>
+                    <Progress.Circle
+                        color={route.params.item.colour}
+                        unfilledColor='lightgrey'
+                        borderWidth={0}
+                        size={100}
+                        progress={data?.progress / (route.params.item.weight / 100)} 
+                        showsText
+                        formatText={() => `Progress: ${displayGrade(data?.progress / (route.params.item.weight / 100))}`} 
+                        textStyle={styles.progressCircleText}
+                    />
+                </View>
             </View>
             <View style={styles.flatListContainer}>
                 <FlatList
                     style={styles.flatListItem}
-                    data={data}
+                    data={data?.subItems}
                     keyExtractor={item => item._id}
                     renderItem={renderItem}
                     ItemSeparatorComponent={Separator}
