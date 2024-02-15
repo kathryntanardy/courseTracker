@@ -91,7 +91,7 @@ const CoursePage = ({ navigation, route }) => {
                             style={styles.editItemButton}
                             size={20}
                             name="edit" 
-                            backgroundColor={data?.colour}
+                            backgroundColor={data?.colour.hex}
                             onPress={() => openEditItemMenu(item)}
                         />
                     </TouchableOpacity>
@@ -100,7 +100,7 @@ const CoursePage = ({ navigation, route }) => {
                             style={styles.editItemButton}
                             size={20}
                             name="delete" 
-                            backgroundColor={data?.colour}
+                            backgroundColor={data?.colour.hex}
                             onPress={() => deleteItem(item.name)}
                         />
                     </TouchableOpacity>
@@ -109,7 +109,7 @@ const CoursePage = ({ navigation, route }) => {
                             style={styles.editItemButton}
                             size={20}
                             name="back" 
-                            backgroundColor={data?.colour}
+                            backgroundColor={data?.colour.hex}
                             onPress={() => {
                                 setSelectedItem("");
                                 setDisplayItemOptions(false);
@@ -142,7 +142,7 @@ const CoursePage = ({ navigation, route }) => {
                     setDeleteItemMenu={setDeleteItemMenu}
                 />
             ) : (<></>)}
-            <View style={[styles.headerContainer, { backgroundColor: data?.colour }]}>
+            <View style={[styles.headerContainer, { backgroundColor: data?.colour.hex }]}>
                 <View style={styles.backButtonWrapper}>
                     <TouchableOpacity onPress={goBack} >
                         <AntIcon name="back" color="white" size={30} />
@@ -162,7 +162,7 @@ const CoursePage = ({ navigation, route }) => {
             <View style={styles.courseProgressDisplayContainer}>
                 <View style={styles.courseProgressGrade}>
                     <Progress.Circle 
-                        color={data?.colour}
+                        color={data?.colour.hex}
                         unfilledColor='lightgrey'
                         borderWidth={0}
                         size={100} 
@@ -175,7 +175,7 @@ const CoursePage = ({ navigation, route }) => {
                 <View style={styles.courseProgressVerticalLine} />
                 <View style={styles.courseProgressPercentage}>
                     <Progress.Circle 
-                        color={data?.colour}
+                        color={data?.colour.hex}
                         unfilledColor='lightgrey'
                         borderWidth={0}
                         size={100} 

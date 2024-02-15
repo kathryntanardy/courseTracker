@@ -20,7 +20,7 @@ const courseSchema = new mongoose.Schema({
         required: true
     },
     colour: {
-        type: String,
+        type: Object,
         required: true
     },
     items: {

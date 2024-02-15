@@ -61,7 +61,7 @@ export default function CourseContent({ navigation }) {
         >
             <View style={styles.outerContainer}>
                 <View style={styles.innerContainer}>
-                    <View style={[styles.courseColourCircle, { backgroundColor: item.colour }]}  />
+                    <View style={[styles.courseColourCircle, { backgroundColor: item.colour.hex }]} />
                     <View style={styles.courseInfo}>
                         <Text style={styles.courseName}>{item.name}</Text>    
                         <Text style={styles.courseCredits}>{item.credits}</Text>
@@ -74,7 +74,7 @@ export default function CourseContent({ navigation }) {
                             style={styles.editItemButton}
                             size={20}
                             name="edit" 
-                            backgroundColor={item.colour}
+                            backgroundColor={item.colour.hex}
                             onPress={() => openEditCourseMenu(item)}
                         />
                     </TouchableOpacity>
@@ -83,7 +83,7 @@ export default function CourseContent({ navigation }) {
                             style={styles.editItemButton}
                             size={20}
                             name="delete" 
-                            backgroundColor={item.colour}
+                            backgroundColor={item.colour.hex}
                             onPress={() => deleteCourse(item.name)}
                         />
                     </TouchableOpacity>
@@ -92,7 +92,7 @@ export default function CourseContent({ navigation }) {
                             style={styles.editItemButton}
                             size={20}
                             name="back" 
-                            backgroundColor={item.colour}
+                            backgroundColor={item.colour.hex}
                             onPress={() => {
                                 setSelectedCourse("");
                                 setDisplayCourseOptions(false);
