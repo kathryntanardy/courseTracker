@@ -9,7 +9,7 @@ const AddCourseMenu = ({ setAddCourseMenu, refetch, editCourseData, editCourseMe
   const [courseName, setCourseName] = useState(editCourseMenu ? editCourseData.name : "");
   const [oldCourseName, setOldCourseName] = useState(editCourseMenu ? editCourseData.name : "");
   const [courseCredits, setCourseCredits] = useState(editCourseMenu ? editCourseData.credits.toString() : "");
-  const [courseColour, setCourseColour] = useState(editCourseMenu ? editCourseData.colour : "#ffffff");
+  const [courseColour, setCourseColour] = useState(editCourseMenu ? editCourseData.colour : {});
 
   const addNewCourse = async () => {
 
@@ -75,10 +75,10 @@ const AddCourseMenu = ({ setAddCourseMenu, refetch, editCourseData, editCourseMe
           />
         </View>
         <View>
-          <ColorPicker 
+          <ColorPicker
             style={styles.colorPickerContainer}
-            value={courseColour}
-            onChange={({ hex }) => setCourseColour(hex)}
+            value={courseColour.hex}
+            onChange={(colour) => setCourseColour(colour)}
           >
             <Panel3 centerChannel='saturation' />
             <BrightnessSlider style={{ marginTop: '10%' }} />

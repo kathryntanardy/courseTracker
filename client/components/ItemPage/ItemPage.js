@@ -81,7 +81,7 @@ const ItemPage = ({ navigation, route }) => {
                             style={styles.editSubItemButton}
                             size={20}
                             name="edit" 
-                            backgroundColor={route.params.item.colour}
+                            backgroundColor={route.params.item.colour.hex}
                             onPress={() => openEditSubItemMenu(item)}
                         />
                     </TouchableOpacity>
@@ -90,7 +90,7 @@ const ItemPage = ({ navigation, route }) => {
                             style={styles.editSubItemButton}
                             size={20}
                             name="delete" 
-                            backgroundColor={route.params.item.colour}
+                            backgroundColor={route.params.item.colour.hex}
                             onPress={() => deleteSubItem(item.name)}
                         />
                     </TouchableOpacity>
@@ -99,7 +99,7 @@ const ItemPage = ({ navigation, route }) => {
                             style={styles.editSubItemButton}
                             size={20}
                             name="back" 
-                            backgroundColor={route.params.item.colour}
+                            backgroundColor={route.params.item.colour.hex}
                             onPress={() => {
                                 setSelectedSubItem("");
                                 setDisplaySubItemOptions(false);
@@ -134,7 +134,7 @@ const ItemPage = ({ navigation, route }) => {
                     setDeleteSubItemMenu={setDeleteSubItemMenu}
                 />
             ) : (<></>)}
-            <View style={[styles.headerContainer, { backgroundColor: route.params.item.colour }]}>
+            <View style={[styles.headerContainer, { backgroundColor: route.params.item.colour.hex }]}>
                 <View style={styles.backButtonWrapper}>
                     <TouchableOpacity onPress={goBack} >
                         <AntIcon name="back" color="white" size={30} />
@@ -154,7 +154,7 @@ const ItemPage = ({ navigation, route }) => {
             <View style={styles.itemProgressDisplayContainer}>
                 <View style={styles.itemProgressGrade}>
                     <Progress.Circle 
-                        color={route.params.item.colour}
+                        color={route.params.item.colour.hex}
                         unfilledColor='lightgrey'
                         borderWidth={0}
                         size={100} 
@@ -167,7 +167,7 @@ const ItemPage = ({ navigation, route }) => {
                 <View style={styles.itemProgressVerticalLine} />
                 <View style={styles.itemProgressPercentage}>
                     <Progress.Circle
-                        color={route.params.item.colour}
+                        color={route.params.item.colour.hex}
                         unfilledColor='lightgrey'
                         borderWidth={0}
                         size={100}

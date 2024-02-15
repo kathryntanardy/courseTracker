@@ -143,7 +143,6 @@ router.patch('/item', async (req, res) => {
         res.status(201).json(course);
 
     } catch (err) {
-        console.log(err.message);
         res.json({ message: err.message });
     }
 });
@@ -171,7 +170,6 @@ router.patch('/item/edit', async (req, res) => {
         res.status(200).json(itemToUpdate);
         
     } catch (err) {
-        console.log(err.message);
         res.status(500).json({ message: err.message });
     }
 
@@ -254,7 +252,6 @@ router.patch('/item/subitem', async (req, res) => {
         await course.save();
         res.status(200).json(subItem);
     } catch (err) {
-        console.log(err.message);
         res.status(500).json({ message: err.message });
     }
 
