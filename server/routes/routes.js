@@ -234,7 +234,8 @@ router.patch('/item/subitem', async (req, res) => {
             name: req.body.name,
             weight: req.body.weight,
             totalMarks: req.body.totalMarks,
-            marksGiven: req.body.marksGiven
+            marksGiven: req.body.marksGiven,
+            dueDate: req.body.dueDate
         }
 
         courseItem.subItems.push(subItem);
@@ -273,6 +274,7 @@ router.patch('/item/subitem/edit', async (req, res) => {
         subItemToFind.weight = req.body.weight;
         subItemToFind.totalMarks = req.body.totalMarks;
         subItemToFind.marksGiven = req.body.marksGiven;
+        subItemToFind.dueDate = req.body.dueDate;
 
         const { newItemGrade, newItemProgress } = calculateItemGradeAndProgress(itemToFind.subItems, itemToFind.weight);
 

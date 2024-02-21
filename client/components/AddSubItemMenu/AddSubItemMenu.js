@@ -1,7 +1,23 @@
 import { View, Text, Button, TextInput } from 'react-native';
 import { useState } from 'react';
 import { addSubItem, editSubItem } from '../../functions.js';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import styles from './AddSubItemMenuStyles.js';
+
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec"
+]
 
 const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, editSubItemMenu, setEditSubItemMenu, editSubItemData }) => {
 
@@ -11,6 +27,10 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, edit
   const [subItemTotalMarks, setSubItemTotalMarks] = useState(editSubItemMenu ? editSubItemData.totalMarks.toString() : "");
   const [subItemMarksGiven, setSubItemMarksGiven] = useState(editSubItemMenu ? editSubItemData.marksGiven.toString() : "");
 
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
   const saveSubItemData = async () => {
 
     const newSubItemData = {
@@ -19,7 +39,8 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, edit
       name: subItemName,
       weight: Number(subItemWeight),
       totalMarks: Number(subItemTotalMarks),
-      marksGiven: Number(subItemMarksGiven)
+      marksGiven: Number(subItemMarksGiven),
+      dueDate: date
     };
 
     try {
@@ -46,6 +67,32 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, edit
     setEditSubItemMenu(false);
 
   }
+
+  const showMode = (newMode) => {
+    setShow(true);
+    setMode(newMode);
+  };
+
+  const handleDateChange = (e, newDate) => {
+
+    setDate(new Date(newDate.getTime() - date.getTimezoneOffset() * 60000));
+    setShow(false);
+
+  };
+
+  const displayDueDate = () => {
+
+    return `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+
+  };
+
+  const displayDueTime = () => {
+
+    let minutes = date.getMinutes() < 10 ? `${date.getMinutes()}0` : date.getMinutes() ;
+
+    return `${(date.getHours() + 8) % 24}:${minutes}`;
+
+  };
 
   return (
     <View style={styles.mainView}>
@@ -87,19 +134,37 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, edit
             onChangeText={grade => setSubItemMarksGiven(grade)}
           />
         </View>
+        <View style={styles.dueDateContainer}>
+          <Text>{displayDueDate()}</Text>
+          <Button title="Set Due Date" onPress={() => showMode("date")} />
+        </View>
+        <View style={styles.dueDateContainer}>
+          <Text>{displayDueTime()}</Text>
+          <Button title="Set Due Time" onPress={() => showMode("time")} />
+        </View>
         <View style={styles.addSubItemButtonContainer}>
-          <Button 
+          <Button
             title={editSubItemMenu ? "Edit SubItem" : "Add SubItem"}
             onPress={saveSubItemData}
           />
         </View>
         <View style={styles.addSubItemButtonContainer}>
           <Button
-            title="Cancel" 
+            title="Cancel"
             color="#c70000"
             onPress={cancelButton}
           />
         </View>
+        {show ? 
+          (
+            <DateTimePicker
+              value={date}
+              mode={mode}
+              display='spinner'
+              onChange={(e, newDate) => handleDateChange(e, newDate)}
+              timeZoneOffsetInSeconds={0}
+            />
+          ) : (<></>)}
       </View>
     </View>
   )
