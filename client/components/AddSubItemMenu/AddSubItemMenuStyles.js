@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     },
     formView: {
         width: '80%',
-        height: 525,
+        height: 650,
         marginRight: '10%',
         marginLeft: '10%',
         marginTop: '10%',
@@ -40,6 +40,14 @@ const styles = StyleSheet.create({
         marginTop: 20,
         width: '80%',
         marginLeft: '10%',
+    },
+    dueDateContainer: {
+        marginLeft: '10%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 30,
+        marginRight: '10%'
     }
 });
 

@@ -58,6 +58,10 @@ const courseSchema = new mongoose.Schema({
                     marksGiven: {
                         type: Number,
                         required: true
+                    },
+                    dueDate: {
+                        type: Date,
+                        required: true
                     }
                 }],
                 required: true

@@ -9,6 +9,21 @@ import AddSubItemMenu from '../AddSubItemMenu/AddSubItemMenu.js';
 import DeleteSubItemMenu from '../DeleteSubItemMenu/DeleteSubItemMenu.js';
 import * as Progress from 'react-native-progress';
 
+const MONTHS = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+]
+
 const Separator = () => <View style={styles.separator} />;
 const ItemPage = ({ navigation, route }) => {
   
@@ -64,6 +79,11 @@ const ItemPage = ({ navigation, route }) => {
         route.params.refetch();
         navigation.goBack();
     };
+
+    const displayDueDate = (itemDueDate) => {
+        let itemDueDateObject = new Date(itemDueDate);
+        return `${MONTHS[itemDueDateObject.getMonth()]} ${itemDueDateObject.getDate()}, ${itemDueDateObject.getFullYear()}`;
+    };
     
     const renderItem = ({ item }) => (
         <TouchableOpacity
@@ -73,6 +93,7 @@ const ItemPage = ({ navigation, route }) => {
                 <View style={styles.courseInfo}>
                     <Text style={styles.courseName}>{item.name} ({item.weight}%)</Text>    
                     <Text style={styles.courseCredits}>{item.marksGiven} / {item.totalMarks}</Text>
+                    <Text>{displayDueDate(item.dueDate)}</Text>
                 </View>
                 {displaySubItemOptions && selectedSubItem === item._id ? (
                 <View style={styles.displaySubItemOptionsContainer}>
