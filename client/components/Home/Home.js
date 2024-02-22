@@ -162,6 +162,7 @@ export default function CourseContent({ navigation }) {
                     courseToDelete={courseToDelete}
                     setDeleteCourseMenu={setDeleteCourseMenu}
                     refetch={refetch}
+                    subItemsRefetch={subItemsRefetch}
                 />
                 : 
                 (<></>)
