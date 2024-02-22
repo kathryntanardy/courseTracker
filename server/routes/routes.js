@@ -297,7 +297,7 @@ router.patch('/item/subitem', async (req, res) => {
 
         course.grade = newCourseGrade;
         course.progress = newCourseProgress;
-        
+    
         await course.save();
         res.status(200).json(subItem);
     } catch (err) {
@@ -394,8 +394,10 @@ const calculateCourseGradeAndProgress = (courseItemList) => {
         }
 
         item.subItems.forEach((subItem) => {
-            tempGrade += (subItem.marksGiven / subItem.totalMarks) * subItem.weight;
-            tempWeight += subItem.weight;
+            if (subItem.marksGiven !== -1) {
+                tempGrade += (subItem.marksGiven / subItem.totalMarks) * subItem.weight;
+                tempWeight += subItem.weight;
+            }
         });
     });
 
@@ -417,9 +419,15 @@ const calculateItemGradeAndProgress = (subItemList, itemWeight) => {
     let tempWeight = 0;
 
     subItemList.forEach((subItem) => {
-        tempGrade += (subItem.marksGiven / subItem.totalMarks) * subItem.weight;
-        tempWeight += subItem.weight;
+        if (subItem.marksGiven !== -1) {
+            tempGrade += (subItem.marksGiven / subItem.totalMarks) * subItem.weight;
+            tempWeight += subItem.weight;
+        }
     });
+
+    if (tempWeight === 0) {
+        return { newItemGrade: 0, newItemProgress: 0 };
+    }
 
     return { newItemGrade: tempGrade / tempWeight, newItemProgress: tempWeight / itemWeight };
 

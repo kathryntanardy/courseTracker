@@ -2,7 +2,7 @@ import { View, Text, Button } from 'react-native';
 import styles from './DeleteCourseMenuStyles.js';
 import { deleteCourse } from '../../functions.js';
 
-const DeleteCourseMenu = ({ courseToDelete, setDeleteCourseMenu, refetch }) => {
+const DeleteCourseMenu = ({ courseToDelete, setDeleteCourseMenu, refetch, subItemsRefetch }) => {
 
     const handleDelete = async () => {
 
@@ -13,6 +13,7 @@ const DeleteCourseMenu = ({ courseToDelete, setDeleteCourseMenu, refetch }) => {
         try {
             await deleteCourse(deleteData);
             refetch();
+            subItemsRefetch();
             setDeleteCourseMenu(false);
         } catch (err) {
             console.log(err.message);

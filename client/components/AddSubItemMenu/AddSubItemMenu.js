@@ -25,13 +25,19 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, edit
   const [oldSubItemName, setOldSubItemName] = useState(editSubItemMenu ? editSubItemData.name : "");
   const [subItemWeight, setSubItemWeight] = useState(editSubItemMenu ? editSubItemData.weight.toString() : "");
   const [subItemTotalMarks, setSubItemTotalMarks] = useState(editSubItemMenu ? editSubItemData.totalMarks.toString() : "");
-  const [subItemMarksGiven, setSubItemMarksGiven] = useState(editSubItemMenu ? editSubItemData.marksGiven.toString() : "");
+  const [subItemMarksGiven, setSubItemMarksGiven] = useState(editSubItemMenu && editSubItemData.marksGiven !== -1 ? editSubItemData.marksGiven.toString() : "");
 
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(editSubItemMenu ? new Date(editSubItemData.dueDate) : new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
   const saveSubItemData = async () => {
+
+    let tempMarksGiven = subItemMarksGiven;
+
+    if (tempMarksGiven.length === 0) {
+      tempMarksGiven = "-1";
+    }
 
     const newSubItemData = {
       courseName: courseName,
@@ -39,7 +45,7 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, edit
       name: subItemName,
       weight: Number(subItemWeight),
       totalMarks: Number(subItemTotalMarks),
-      marksGiven: Number(subItemMarksGiven),
+      marksGiven: Number(tempMarksGiven),
       dueDate: date
     };
 

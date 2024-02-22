@@ -82,7 +82,7 @@ const CoursePage = ({ navigation, route }) => {
                 <View style={styles.courseInfo}>
                     <Text style={styles.courseName}>{item.name} ({item.weight}%)</Text>    
                     <Text style={styles.courseCredits}>
-                        {displayGrade(item.grade)}
+                        {item.progress > 0 ? displayGrade(item.grade) : null}
                     </Text>
                 </View>
                 {displayItemOptions && selectedItem === item._id ? (
