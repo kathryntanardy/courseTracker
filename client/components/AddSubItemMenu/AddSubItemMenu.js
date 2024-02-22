@@ -81,7 +81,7 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, edit
 
   const handleDateChange = (e, newDate) => {
 
-    setDate(new Date(newDate.getTime() - date.getTimezoneOffset() * 60000));
+    setDate(new Date(newDate.getTime()));
     setShow(false);
 
   };
@@ -96,7 +96,7 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, edit
 
     let minutes = date.getMinutes() < 10 ? `${date.getMinutes()}0` : date.getMinutes() ;
 
-    return `${(date.getHours() + 8) % 24}:${minutes}`;
+    return `${(date.getHours()) % 24}:${minutes}`;
 
   };
 
@@ -168,7 +168,6 @@ const AddSubItemMenu = ({ courseName, itemName, refetch, setAddSubItemMenu, edit
               mode={mode}
               display='spinner'
               onChange={(e, newDate) => handleDateChange(e, newDate)}
-              timeZoneOffsetInSeconds={0}
             />
           ) : (<></>)}
       </View>
