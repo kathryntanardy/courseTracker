@@ -21,7 +21,7 @@ const CoursePage = ({ navigation, route }) => {
 
     const { data, refetch } = useQuery({
         queryKey: "getCourse",
-        queryFn: () => getCourse(route.params.name)
+        queryFn: () => getCourse(route.params.subject.name)
     })
 
     const handlePress = (item) => {
@@ -69,6 +69,7 @@ const CoursePage = ({ navigation, route }) => {
     };
 
     const goBack = () => {
+        route.params.refetch();
         navigation.navigate('Home');
     };
 

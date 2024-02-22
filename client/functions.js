@@ -101,6 +101,15 @@ export const getSubItems = async (courseItemData) => {
     .catch((err) => err.message);
 };
 
+// Get all subItems with upcoming due dates
+export const getUpcomingSubItems = async () => {
+    return await axios.get(`${url}/item/subitem/upcoming`)
+    .then((res) => {
+        return res.data;
+    })
+    .catch((err) => err.message);
+}
+
 // Add subitem to Item
 export const addSubItem = async (courseItemData) => {
     return await axios.patch(`${url}/item/subitem`, courseItemData)

@@ -1,8 +1,24 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-    container: {
-        width: '100%'
+    courseContainer: {
+        width: '100%',
+        marginTop: 30,
+        height: 450
+    },
+    subItemContainer: {
+        width: '100%',
+        marginTop: 30,
+        height: 200
+    },
+    flatListHeaderTextWrapper: {
+        width: '95%',
+        marginLeft: '2.5%',
+        borderBottomWidth: 1
+    },
+    flatListHeaderText: {
+        fontSize: 20,
+        fontWeight: 'bold'
     },
     courseInfo: {
         paddingLeft: 15
@@ -18,7 +34,9 @@ const styles = StyleSheet.create({
         opacity: 1,
     },
     divBox: {
-        padding: 15,
+        marginTop: 15,
+        paddingRight: 15,
+        paddingLeft: 15
     },
     outerContainer: {
         display: 'flex',
@@ -95,6 +113,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 5
     },
+    subItemColourCircle: {
+        width: 10,
+        height: 10
+    }
 });
 
 export default styles;
