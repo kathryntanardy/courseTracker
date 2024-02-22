@@ -84,6 +84,12 @@ const styles = StyleSheet.create({
     },
     progressCircleText: {
         fontSize: 15
+    },
+    courseName: {
+        fontWeight: 'bold'
+    },
+    courseCredits: {
+        fontStyle: 'italic'
     }
 });
 
