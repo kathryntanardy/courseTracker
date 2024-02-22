@@ -82,7 +82,7 @@ export default function CourseContent({ navigation }) {
     const displaySubItemDueDate = (subItemDueDate) => {
 
         const subItemDueDateObject = new Date(subItemDueDate);
-        return `${MONTHS[subItemDueDateObject.getMonth() - 1]} ${subItemDueDateObject.getDate()}, ${subItemDueDateObject.getFullYear()}`
+        return `${MONTHS[subItemDueDateObject.getMonth()]} ${subItemDueDateObject.getDate()}, ${subItemDueDateObject.getFullYear()}`
 
     };
 
