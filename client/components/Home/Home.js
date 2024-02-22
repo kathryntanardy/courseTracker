@@ -1,6 +1,6 @@
 import { View, Text, FlatList, TouchableOpacity, StatusBar } from 'react-native'
 import { useState } from 'react'
-import { getCourses } from '../../functions.js';
+import { getCourses, getUpcomingSubItems } from '../../functions.js';
 import { useQuery } from 'react-query';
 import styles from './HomeStyles.js';
 import AddCourseMenu from '../AddCourseMenu/AddCourseMenu.js';
@@ -13,6 +13,20 @@ const courses = [
     { name: 'CMPT', _id: '3C', credits: 4 }
 ];
 
+const MONTHS = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+];
 
 const Separator = () => <View style={styles.separator} />;
 export default function CourseContent({ navigation }) {
@@ -21,6 +35,14 @@ export default function CourseContent({ navigation }) {
         queryKey: ["getcourses"],
         queryFn: getCourses
     });
+
+    const {
+            data: subItemsData, 
+            isLoading: subItemsIsLoading, 
+            refetch: subItemsRefetch } = useQuery({
+                queryKey: ["getSubItems"],
+                queryFn: getUpcomingSubItems
+            })
 
     const [addCourseMenu, setAddCourseMenu] = useState(false);
     const [deleteCourseMenu, setDeleteCourseMenu] = useState(false);
@@ -31,7 +53,10 @@ export default function CourseContent({ navigation }) {
     const [editCourseMenu, setEditCourseMenu] = useState(false);
 
     const handlePress = (subject) => {
-        navigation.navigate('Course', subject);
+        navigation.navigate('Course', {
+            subject: subject,
+            refetch: () => subItemsRefetch()
+        });
     }
 
     const addCourse = () => {
@@ -54,7 +79,14 @@ export default function CourseContent({ navigation }) {
         setAddCourseMenu(true);
     };
 
-    const renderItem = ({ item }) => (
+    const displaySubItemDueDate = (subItemDueDate) => {
+
+        const subItemDueDateObject = new Date(subItemDueDate);
+        return `${MONTHS[subItemDueDateObject.getMonth() - 1]} ${subItemDueDateObject.getDate()}, ${subItemDueDateObject.getFullYear()}`
+
+    };
+
+    const renderCourseItem = ({ item }) => (
         <TouchableOpacity 
             onPress={() => handlePress(item)}
             onLongPress={() => setSelectedCourseID(item._id)}
@@ -105,6 +137,15 @@ export default function CourseContent({ navigation }) {
         </TouchableOpacity>
     );
 
+    const renderSubItem = ({ item }) => (
+        <View style={styles.outerContainer}>
+            <View style={[styles.subItemColourCircle, { backgroundColor: item.courseColour.hex }]} />
+            <Text>{item.courseName}</Text>
+            <Text>{item.name}</Text>
+            <Text>{displaySubItemDueDate(item.dueDate)}</Text>
+        </View>
+    );
+
     return (
         <View style={{ top: StatusBar.currentHeight, height: '100%' }}>
             {addCourseMenu ? 
@@ -128,7 +169,7 @@ export default function CourseContent({ navigation }) {
             <View style={styles.headerOuter}>
                 <View style={styles.headerTextWrapper}>
                     <Text style={styles.headerText}>
-                        Courses
+                        Home
                     </Text>
                 </View>
                 <View style={styles.addButtonWrapper}>
@@ -137,14 +178,35 @@ export default function CourseContent({ navigation }) {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.container}>
+            <View style={styles.subItemContainer}>
+                <View style={styles.flatListHeaderTextWrapper}>
+                    <Text style={styles.flatListHeaderText}>
+                        Upcoming Deadlines
+                    </Text>
+                </View>
+                <FlatList
+                    style={styles.divBox}
+                    data={subItemsData}
+                    keyExtractor={item => item._id}
+                    renderItem={renderSubItem}
+                    ItemSeparatorComponent={Separator}
+                    scrollEnabled={true}
+                />
+            </View>
+            <View style={styles.courseContainer}>
+                <View style={styles.flatListHeaderTextWrapper}>
+                    <Text style={styles.flatListHeaderText}>
+                        Courses
+                    </Text>
+                </View>
                 <FlatList
                     style={styles.divBox}
                     data={data}
                     extraData={addCourseMenu}
                     keyExtractor={item => item._id }
-                    renderItem={renderItem}
+                    renderItem={renderCourseItem}
                     ItemSeparatorComponent={Separator}
+                    scrollEnabled={true}
                 />
             </View>
         </View>

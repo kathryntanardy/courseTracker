@@ -201,6 +201,54 @@ router.delete('/item', async (req, res) => {
 
 // SubItems
 
+// Get all subItems with upcoming due dates
+router.get('/item/subitem/upcoming', async (req, res) => {
+    
+    upcomingSubItemList = [];
+    const currentDate = new Date();
+
+    try {
+
+        const courseList = await Course.find();
+
+        courseList.forEach((course) => {
+
+            course.items.forEach((item) => {
+
+                item.subItems.forEach((subItem) => {
+
+                    const subItemDueDate = new Date(subItem.dueDate);
+                    if (subItemDueDate.getTime() > currentDate.getTime()) {
+                        let subItemToAdd = {
+                            courseName: course.name,
+                            courseColour: course.colour,
+                            name: subItem.name,
+                            weight: subItem.weight,
+                            totalMarks: subItem.totalMarks,
+                            marksGiven: subItem.marksGiven,
+                            dueDate: new Date(subItem.dueDate).getTime(),
+                            _id: subItem._id
+                        };
+                        
+                        upcomingSubItemList.push(subItemToAdd);
+                    }
+
+                });
+
+            });
+
+        });
+
+        upcomingSubItemList.sort(sortDueDates);
+
+        res.status(200).json(upcomingSubItemList);
+
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+
+});
+
 // Get subItems of an item
 router.get('/item/subitem', async (req, res) => {
 
@@ -374,6 +422,12 @@ const calculateItemGradeAndProgress = (subItemList, itemWeight) => {
     });
 
     return { newItemGrade: tempGrade / tempWeight, newItemProgress: tempWeight / itemWeight };
+
+};
+
+const sortDueDates = (item1, item2) => {
+
+    return item1.dueDate -  item2.dueDate;
 
 };
 
